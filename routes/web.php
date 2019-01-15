@@ -74,6 +74,6 @@ Route::get('/pay','Pay\AliPayController@test');
 //支付宝调回
 Route::get('/orderPay/{order_id}','Pay\AliPayController@pay')->middleware('check.login.token');
 Route::post('/pay/alipay/notify','Pay\AlipayController@aliNotify');//异步通知
-Route::post('/pay/alipay/return','Pay\AlipayController@aliReturn');//同步通知
+Route::get('/pay/alipay/return','Pay\AlipayController@aliReturn');//同步通知
 
 
