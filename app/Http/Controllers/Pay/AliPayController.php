@@ -168,7 +168,7 @@ class AliPayController extends Controller
     public function aliReturn()
     {
         echo '<pre>';print_r($_GET);echo "</pre>";
-        header('Refresh:2;url=/orderList');
+        //header('Refresh:2;url=/orderList');
         echo '订单：'.$_GET['out_trade_no']. '支付成功，正在跳转';
         //验签 支付宝的公钥
 //        if(!$this->verify()){
