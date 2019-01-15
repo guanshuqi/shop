@@ -142,7 +142,7 @@ class AliPayController extends Controller
 
         return false;
     }
-
+    
 
     /**
      * 转换字符集编码
