@@ -51,44 +51,7 @@ class AlipayController extends Controller
     }
 
 
-    public function test()
-    {
-
-        $bizcont = [
-            'subject'           => 'ancsd'. mt_rand(1111,9999).str_random(6),
-            'out_trade_no'      => 'oid'.date('YmdHis').mt_rand(1111,2222),
-            'total_amount'      => 0.01,
-            'product_code'      => 'QUICK_WAP_WAY',
-
-        ];
-
-        $data = [
-            'app_id'   => $this->app_id,
-            'method'   => 'alipay.trade.wap.pay',
-            'format'   => 'JSON',
-            'charset'   => 'utf-8',
-            'sign_type'   => 'RSA2',
-            'timestamp'   => date('Y-m-d H:i:s'),
-            'version'   => '1.0',
-            'notify_url'   => $this->notify_url,        //异步通知地址
-            'return_url'   => $this->return_url,        // 同步通知地址
-            'biz_content'   => json_encode($bizcont),
-        ];
-
-        $sign = $this->rsaSign($data);
-        $data['sign'] = $sign;
-        $param_str = '?';
-        foreach($data as $k=>$v){
-            $param_str .= $k.'='.urlencode($v) . '&';
-        }
-
-        $url = rtrim($param_str,'&');
-        $url = $this->gate_way . $url;
-        header("Location:".$url);
-    }
-
-
-    /**
+    /*
      * 订单支付
      * @param $oid
      */
@@ -228,11 +191,9 @@ class AlipayController extends Controller
     public function aliReturn()
     {
 
-
-        header('Refresh:2;url=/orderList');
         echo "订单： ".$_GET['out_trade_no'] . ' 支付成功，正在跳转';
 
-        echo '<pre>';print_r($_GET);echo '</pre>';die;
+        echo '<pre>';print_r($_GET);echo '</pre>';
 //        //验签 支付宝的公钥
 //        if(!$this->verify($_GET)){
 //            die('簽名失敗');
