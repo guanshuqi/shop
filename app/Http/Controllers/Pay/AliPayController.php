@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Pay;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Model\OrderModel;
 class AliPayController extends Controller
 {
     //
@@ -42,13 +42,23 @@ class AliPayController extends Controller
     }
 
 
-    public function test()
+    public function pay($order_id)
     {
+        //验证订单状态
+        $orderInfo=OrderModel::where(['order_id'=>$order_id])->first()->toArray();
+        //是否已支付
+        if($orderInfo['is_pay']==1){
+            die('订单已支付，请勿重复支付');
+        }
+        //是否已删除
+        if($orderInfo['is_delete']==1){
+            die('订单已支付，请勿重复支付');
+        }
 
         $bizcont = [
-            'subject'           => 'ancsd'. mt_rand(1111,9999).str_random(6),
-            'out_trade_no'      => 'oid'.date('YmdHis').mt_rand(1111,2222),
-            'total_amount'      => 0.01,
+            'subject'           => 'Lening_shop'. $order_id,
+            'out_trade_no'      => $order_id,
+            'total_amount'      => $orderInfo['add_amount']/100,
             'product_code'      => 'QUICK_WAP_WAY',
 
         ];
@@ -61,10 +71,11 @@ class AliPayController extends Controller
             'sign_type'   => 'RSA2',
             'timestamp'   => date('Y-m-d H:i:s'),
             'version'   => '1.0',
-            'notify_url'   => $this->notify_url,
+            'notify_url'   => $this->notify_url,//异步通知地址
+            'return_url'   => $this->return_url,//同步通知地址
             'biz_content'   => json_encode($bizcont),
         ];
-
+        //签名
         $sign = $this->rsaSign($data);
         $data['sign'] = $sign;
         $param_str = '?';
@@ -155,20 +166,21 @@ class AliPayController extends Controller
      */
     public function aliReturn()
     {
-        echo '<pre>';print_r($_GET);echo '</pre>';
+        header('Refresh:2;url=/orderList');
+        echo '订单：'.$_GET['out_trade_no']. '支付成功，正在跳转';
         //验签 支付宝的公钥
-        if(!$this->verify()){
-            echo 'error';
-        }
-
-        //处理订单逻辑
-        $this->dealOrder($_GET);
+//        if(!$this->verify()){
+//            echo 'error';
+//        }
+//
+//        //处理订单逻辑
+//        $this->dealOrder($_GET);
     }
 
     /**
      * 支付宝异步通知
      */
-    public function aliNotify()
+    public function aliNotify($order_id)
     {
 
         $data = json_encode($_POST);
@@ -186,6 +198,20 @@ class AliPayController extends Controller
         }else{
             $log_str .= " Sign OK!<<<<< \n\n";
             file_put_contents('logs/alipay.log',$log_str,FILE_APPEND);
+        }
+        //验证订单状态
+        if($_POST['trade_status']=='TRADE_SUCCESS'){
+            //更新订单状态
+            $oid = $_POST['out_trade_no'];     //商户订单号
+            $info = [
+                'is_pay'        => 1,       //支付状态  0未支付 1已支付
+                'pay_amount'    => $_POST['total_amount'] * 100,    //支付金额
+                'pay_time'      => strtotime($_POST['gmt_payment']), //支付时间
+                'plat_oid'      => $_POST['trade_no'],      //支付宝订单号
+                'plat'          => 1,      //平台编号 1支付宝 2微信
+            ];
+
+            OrderModel::where(['order_id'=>$order_id])->update($info);
         }
 
         //处理订单逻辑
@@ -218,14 +244,6 @@ class AliPayController extends Controller
 
         return $result;
     }
-
-    protected function rsaCheckV1($params, $rsaPublicKeyFilePath,$signType='RSA') {
-        $sign = $params['sign'];
-        $params['sign_type'] = null;
-        $params['sign'] = null;
-        return $this->verify($this->getSignContent($params), $sign, $rsaPublicKeyFilePath,$signType);
-    }
-
     /**
      * 处理订单逻辑 更新订单 支付状态 更新订单支付金额 支付时间
      * @param $data
