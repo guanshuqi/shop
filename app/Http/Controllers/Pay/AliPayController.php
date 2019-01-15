@@ -192,7 +192,6 @@ class AlipayController extends Controller
     {
 
         echo "订单： ".$_GET['out_trade_no'] . ' 支付成功，正在跳转';
-
         echo '<pre>';print_r($_GET);echo '</pre>';
 //        //验签 支付宝的公钥
 //        if(!$this->verify($_GET)){
