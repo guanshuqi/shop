@@ -75,9 +75,15 @@ class AlipayController extends Controller
 
         //业务参数
         $bizcont = [
+<<<<<<< HEAD
             'subject'           => 'Lening-Order: ' .$oid,
             'out_trade_no'      => $oid,
             'total_amount'      => $order_info['add_amount'] / 100,
+=======
+            'subject'           => 'Lening_shop'. $order_id,
+            'out_trade_no'      => $orderInfo['order_sn'],
+            'total_amount'      => $orderInfo['add_amount']/100,
+>>>>>>> alipay
             'product_code'      => 'QUICK_WAP_WAY',
 
         ];
