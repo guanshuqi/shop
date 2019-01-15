@@ -142,7 +142,7 @@ class AliPayController extends Controller
 
         return false;
     }
-    
+
 
     /**
      * 转换字符集编码
@@ -181,7 +181,7 @@ class AliPayController extends Controller
     /**
      * 支付宝异步通知
      */
-    public function aliNotify($order_id)
+    public function aliNotify()
     {
 
         $data = json_encode($_POST);
@@ -212,7 +212,7 @@ class AliPayController extends Controller
                 'plat'          => 1,      //平台编号 1支付宝 2微信
             ];
 
-            OrderModel::where(['order_id'=>$order_id])->update($info);
+            OrderModel::where(['order_id'=>$oid])->update($info);
         }
 
         //处理订单逻辑
