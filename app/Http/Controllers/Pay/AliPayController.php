@@ -249,7 +249,6 @@ class AlipayController extends Controller
 
         //处理订单逻辑
         $this->dealOrder($_POST);
-
         echo 'success';
     }
 
