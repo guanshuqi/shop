@@ -184,10 +184,12 @@ class AliPayController extends Controller
     public function aliNotify()
     {
 
-        $data = json_encode($_POST);
-        $log_str = '>>>> '.date('Y-m-d H:i:s') . $data . "<<<<\n\n";
+        //$data = json_encode($_POST);
+        //$log_str = '>>>> '.date('Y-m-d H:i:s') . $data . "<<<<\n\n";
         //记录日志
-        file_put_contents('logs/alipay.log',$log_str,FILE_APPEND);
+        //file_put_contents('logs/alipay.log',$log_str,FILE_APPEND);
+        $json='{"gmt_create":"2019-01-15 23:09:16","charset":"utf-8","seller_email":"grykdp4969@sandbox.com","subject":"Lening_shop2","sign":"YLxqz8nN8TbR9vPeIvWV9P5sbeeppVrIo3cG64S2gCjBnE1MGWU5DD+9pwfnPINnbG0ZfASquevjAsh+l6kQFjQf2nbclR+0UCRrLzwJKU1fGCvroEiVt0hHv14cspM6OJPU6jKmBs5zaL3YmaBdKA9\/ZgFJofrhoKSLEd6T1MmPmEpGjF\/0ZWx8ZBHZ6gfSBboRmnXWqr3QZxV9\/DvrFmLpHMS3T\/nR3KIUUSYm\/q\/DyDJ8tWCJVoM0O9rT0Dc2SxEa5oAXuovVqgFTi57npIL+de6jtgt1mPDLm0J\/+N3kx9ch2eAIhK6e2NtHjAywUpd7aE\/Fnd01e2X2voRtlg==","buyer_id":"2088102177375427","invoice_amount":"5.00","notify_id":"0711769d82edbbfba8c128a06251ca5j8t","fund_bill_list":"[{\"amount\":\"5.00\",\"fundChannel\":\"ALIPAYACCOUNT\"}]","notify_type":"trade_status_sync","trade_status":"TRADE_SUCCESS","receipt_amount":"5.00","app_id":"2016092200571824","buyer_pay_amount":"5.00","sign_type":"RSA2","seller_id":"2088102176797697","gmt_payment":"2019-01-15 23:09:16","notify_time":"2019-01-15 23:09:17","version":"1.0","out_trade_no":"1901151107794673115","total_amount":"5.00","trade_no":"2019011522001475420500569869","auth_app_id":"2016092200571824","buyer_logon_id":"jhe***@sandbox.com","point_amount":"0.00"}';
+        $_POST=json_decode($json,true);
         //验签
         $res = $this->verify($_POST);
 
