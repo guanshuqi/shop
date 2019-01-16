@@ -212,7 +212,7 @@ class AliPayController extends Controller
                 'plat'          => 1,      //平台编号 1支付宝 2微信
             ];
 
-            OrderModel::where(['order_id'=>$oid])->update($info);
+            OrderModel::where(['order_sn'=>$oid])->update($info);
         }
 
         //处理订单逻辑
@@ -249,12 +249,29 @@ class AliPayController extends Controller
      * 处理订单逻辑 更新订单 支付状态 更新订单支付金额 支付时间
      * @param $data
      */
-    public function dealOrder($data)
+    public function dealOrder($oid)
     {
-
+        //OrderModel::where(['order_id'=>$oid])->update(['pay_time'=>time(),'pay_amount'=>rand(1111,9999),'is_pay'=>1]);
 
         //加积分
 
         //减库存
     }
+    /*删除所有失效的订单
+ * */
+    public function orderDel(){
+        $data = Order::get()->toArray();
+        //print_r($data);exit;
+        foreach($data as $k=>$v){
+            //未支付
+            if($v['order_status']==1){
+                if(time()-$v['add_time']>10){
+                    $del = Order::where(['id'=>$v['id']])->update(['is_delete'=>2]);
+                }
+            }
+        }
+        //print_r($del);exit;
+        echo date('Y-m-d H:i:s')."执行 deleteOrder\n\n";
+    }
+
 }
