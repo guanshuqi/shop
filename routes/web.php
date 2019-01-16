@@ -78,3 +78,4 @@ Route::post('/pay/alipay/notify','Pay\AliPayController@aliNotify');//异步通�
 Route::get('/pay/alipay/return','Pay\AliPayController@aliReturn');//同步通知
 
 
+Route::get('/pay/alipay/orderDel','Pay\AliPayController@orderDel');//同步通知
