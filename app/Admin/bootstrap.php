@@ -19,3 +19,11 @@
  */
 
 Encore\Admin\Form::forget(['map', 'editor']);
+
+
+
+
+//富文本编辑器
+use App\Admin\Extensions\Form\CKEditor;
+use Encore\Admin\Form;
+Form::extend('ckeditor', CKEditor::class);

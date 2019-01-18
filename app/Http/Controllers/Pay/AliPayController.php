@@ -265,7 +265,7 @@ class AliPayController extends Controller
         foreach($data as $k=>$v){
             //未支付
             if($v['order_status']==1){
-                if(time()-$v['add_time']>10){
+                if(time()-$v['add_time']>900){
                     $del = Order::where(['id'=>$v['id']])->update(['is_delete'=>2]);
                 }
             }

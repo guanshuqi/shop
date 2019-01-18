@@ -66,9 +66,8 @@ Route::get('/goodsList','Login\LoginController@goodsList');
 //商品详情
 Route::get('/goods/{goods_id}','Goods\GoodsController@index');
 //订单
-Route::get('/orderAdd','Order\OrderController@orderAdd')->middleware('check.login.token');
-Route::get('/orderList','Order\OrderController@orderList')->middleware('check.login.token');
-Route::get('/orderList','Order\OrderController@orderList')->middleware('check.login.token');
+Route::get('/orderAdd','Order\OrderController@orderAdd');
+Route::get('/orderList','Order\OrderController@orderList');
 Route::get('/test0','Pay\AliPayController@test0');
 Route::get('/pay','Pay\AliPayController@test');
 //支付宝调回
@@ -79,3 +78,7 @@ Route::get('/pay/alipay/return','Pay\AliPayController@aliReturn');//同步通知
 
 
 Route::get('/pay/alipay/orderDel','Pay\AliPayController@orderDel');//同步通知
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

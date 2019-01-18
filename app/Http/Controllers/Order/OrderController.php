@@ -14,6 +14,11 @@ class OrderController extends Controller
     public function index(){
         echo __METHOD__;
     }
+
+
+    public function __construct(){
+        $this->Middleware('auth');
+    }
     //下单
     public function orderAdd(Request $request){
         //查询购物车商品
