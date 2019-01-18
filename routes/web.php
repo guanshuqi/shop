@@ -72,7 +72,7 @@ Route::get('/test0','Pay\AliPayController@test0');
 Route::get('/pay','Pay\AliPayController@test');
 //支付宝调回
 
-Route::get('/orderPay/{oid}','Pay\AliPayController@pay')->middleware('check.login.token');
+Route::get('/orderPay/{oid}','Pay\AliPayController@pay');
 Route::post('/pay/alipay/notify','Pay\AliPayController@aliNotify');//异步通知
 Route::get('/pay/alipay/return','Pay\AliPayController@aliReturn');//同步通知
 
