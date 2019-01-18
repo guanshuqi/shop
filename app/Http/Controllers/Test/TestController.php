@@ -90,7 +90,7 @@ class TestController extends Controller
      */
     public function cookieTest1()
     {
-        setcookie('cookie1','lening',time()+1200,'/','lening.com',false,true);
+        setcookie('cookie1','lening',time()+1200,'/','shop.com',false,true);
         echo '<pre>';print_r($_COOKIE);echo '</pre>';
     }
 

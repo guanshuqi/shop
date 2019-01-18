@@ -110,7 +110,8 @@ class LoginController extends Controller{
     }
     //商品列表
     public function goodsList(){
-        $list=GoodsModel::all()->toArray();
+        $list=GoodsModel::paginate(2);
+        //$list=GoodsModel::all()->toArray();
         $data=[
             'list'=>$list
         ];

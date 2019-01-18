@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ClickLog;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -37,7 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'log.click'=>[
-            clickLog::class
+            ClickLog::class
         ],
         'api' => [
             'throttle:60,1',
