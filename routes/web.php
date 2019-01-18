@@ -54,7 +54,14 @@ Route::any('/bootstorp','Test\TestController@bootstorp');
 Route::any('/login/center','Login\LoginController@center');
 Route::any('/quit','Login\LoginController@quit');
 //中间件
-Route::any('/test/check_cookie','Test\TestController@checkCookie')->middleware('check.cookie');
+Route::middleware(['log.click'])->group(function(){
+    Route::any('/test/guzzle','Test\TestController@guzzleTest');
+    Route::get('/test/cookie1','Test\TestController@cookieTest1');
+    Route::get('/test/cookie2','Test\TestController@cookieTest2');
+    Route::get('/test/session','Test\TestController@sessionTest');
+    Route::get('/test/mid1','Test\TestController@mid1')->middleware('check.uid');        //中间件测试
+    Route::get('/test/check_cookie','Test\TestController@checkCookie')->middleware('check.cookie');
+});
 //购物车
 Route::any('/cart','Cart\CartController@index')->middleware('check.login.token');
 Route::get('/cartAdd/{goods_id}','Cart\CartController@cartAdd')->middleware('check.login.token');
