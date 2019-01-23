@@ -1,7 +1,15 @@
-@extends("user.bst")
+@extends('user.bst');
 @section('content')
-    <h2 style="align-content: center;color: blue;">商品列表</h2>
-
+<div class="nav navbar-right panel_toolbox col-xs-3">
+    <form role="form" method="GET" action="/search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="请输入标题" name="s">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+        </div>
+    </form>
+</div>
     <table class="table table-striped">
         <thead>
         <tr class="active">
@@ -25,4 +33,5 @@
         </tbody>
     </table>
     {{$list->links()}}
-@endsection
+ @endsection
+

@@ -22,8 +22,6 @@ class GoodsController extends Controller
         ];
         return view('goods.goods',$data);
     }
-
-
     //文件上传视图
     public function uploadIndex(){
         return view('goods.upload');
@@ -43,14 +41,10 @@ class GoodsController extends Controller
     //搜索
     public function search(Request $request){
         $search = $request->input('s');
-        if (empty($search)) {
-            $newslist =GoodsModel::get();
-        } else {
-            $newslist =GoodsModel::where([
-                ['goods_name', 'like', "%$search%"]
-            ])->get();
-        }
-
-        return view('goods.goodsList', $newslist);
+        $newslist =GoodsModel::where([['goods_name', 'like', "%$search%"]])->paginate(2);
+        $data=[
+            'list'=>$newslist
+        ];
+        return view('goods.search', $data);
     }
 }
