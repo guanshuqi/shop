@@ -89,3 +89,10 @@ Route::get('/pay/alipay/orderDel','Pay\AliPayController@orderDel');//同步通�
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+//文件上传
+Route::get('/upload','Goods\GoodsController@uploadIndex');
+Route::post('/goods/upload/pdf','Goods\GoodsController@uploadDF');
+//搜索
+Route::get('/search','Goods\GoodsController@search');

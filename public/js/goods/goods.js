@@ -28,7 +28,7 @@ $('.cart_del').click(function(e){
     e.preventDefault();
     var _this=$(this);
     var goods_id=_this.attr('goods_id');
-    console.log(goods_id);
+    //console.log(goods_id);
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -46,4 +46,4 @@ $('.cart_del').click(function(e){
             }
         }
     });
-})
+});

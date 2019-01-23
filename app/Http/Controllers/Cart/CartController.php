@@ -25,7 +25,7 @@ class CartController extends Controller{
 //            }
 //        }
 //        session('cart_goods',null);
-        $uid=session()->get('uid');
+        //$uid=session()->get('uid');
         $cart_goods = CartModel::where(['uid'=>$this->uid])->get()->toArray();
         if(empty($cart_goods)){
             echo "购物车是空的";

@@ -22,4 +22,35 @@ class GoodsController extends Controller
         ];
         return view('goods.goods',$data);
     }
+
+
+    //文件上传视图
+    public function uploadIndex(){
+        return view('goods.upload');
+    }
+    //文件上传
+    public function uploadDF(Request $request){
+        $pdf=$request->file('upload');
+        $ext=$pdf->extension();
+        if($ext !='pdf'){
+            die('请上传PDF格式的文件');
+        }
+        $res=$pdf->storeAs(date('Ymd'),str_random(5).'.pdf');
+        if($res){
+            echo '上传成功';
+        }
+    }
+    //搜索
+    public function search(Request $request){
+        $search = $request->input('s');
+        if (empty($search)) {
+            $newslist =GoodsModel::get();
+        } else {
+            $newslist =GoodsModel::where([
+                ['goods_name', 'like', "%$search%"]
+            ])->get();
+        }
+
+        return view('goods.goodsList', $newslist);
+    }
 }
