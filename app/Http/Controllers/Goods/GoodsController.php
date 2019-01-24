@@ -12,8 +12,6 @@ class GoodsController extends Controller
 
     //商品详情
     public function index($goods_id){
-
-
         $goods_key='h_goods_key_'.$goods_id;
         echo $goods_key;
         $goods_info=Redis::hGetAll($goods_key);
@@ -25,10 +23,10 @@ class GoodsController extends Controller
             $goods_info=GoodsModel::where(['goods_id'=>$goods_id])->first()->toArray();
             echo '<pre>';print_r($goods_info);echo '</pre>';
         }
-
         //写入缓存
         $res=Redis::hmset($goods_key,$goods_info);
-        
+        //设置过期时间
+        redis::expire($goods_key,10);
         //该商品是否存在
         if(!$goods_info){
             header('Refresh:2;url=/login/center');
