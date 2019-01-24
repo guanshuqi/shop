@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>{{$goods->goods_name}}</h1>
+        <h1>{{$goods['goods_name']}}</h1>
 
-        <span> 价格： {{$goods->price / 100}}</span>
+        <span> 价格： {{$goods['price'] / 100}}</span>
 
 
         <form class="form-inline">
@@ -14,7 +14,7 @@
                     <input type="text" class="form-control" id="goods_num" value="1">
                 </div>
             </div>
-            <input type="hidden" id="goods_id" value="{{$goods->goods_id}}">
+            <input type="hidden" id="goods_id" value="{{$goods['goods_id']}}">
             <button type="submit" class="btn btn-primary" id="add_cart_btn">加入购物车</button>
         </form>
     </div>

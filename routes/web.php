@@ -59,8 +59,10 @@ Route::middleware(['log.click'])->group(function(){
     Route::get('/test/cookie1','Test\TestController@cookieTest1');
     Route::get('/test/cookie2','Test\TestController@cookieTest2');
     Route::get('/test/session','Test\TestController@sessionTest');
-    Route::get('/test/mid1','Test\TestController@mid1')->middleware('check.uid');        //中间件测试
-    Route::get('/test/check_cookie','Test\TestController@checkCookie')->middleware('check.cookie');
+    Route::get('/test/mid1','Test\TestController@mid1');        //中间件测试
+    Route::get('/test/check_cookie','Test\TestController@checkCookie');
+    //Route::get('/test/goods/{goods_id}','Goods\GoodsController@index');
+
 });
 //购物车
 Route::any('/cart','Cart\CartController@index')->middleware('check.login.token');
@@ -84,7 +86,7 @@ Route::post('/pay/alipay/notify','Pay\AliPayController@aliNotify');//异步通�
 Route::get('/pay/alipay/return','Pay\AliPayController@aliReturn');//同步通知
 
 
-Route::get('/pay/alipay/orderDel','Pay\AliPayController@orderDel');//同步通知
+Route::get('/pay/alipay/orderDel','Pay\AliPayController@orderDel');
 
 Auth::routes();
 
@@ -96,3 +98,4 @@ Route::get('/upload','Goods\GoodsController@uploadIndex');
 Route::post('/goods/upload/pdf','Goods\GoodsController@uploadDF');
 //搜索
 Route::get('/search','Goods\GoodsController@search');
+

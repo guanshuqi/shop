@@ -1,9 +1,9 @@
-@extends('user.bst');
+@extends('user.bst')
 @section('content')
 <div class="nav navbar-right panel_toolbox col-xs-3">
     <form role="form" method="GET" action="/search">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="请输入标题" name="s">
+            <input type="text" class="form-control" placeholder="请输入标题" name="s" value="{{$search}}">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">搜索</button>
                 </span>
@@ -32,6 +32,7 @@
         @endforeach
         </tbody>
     </table>
-    {{$list->links()}}
+    {{$list->links()}}​
  @endsection
+
 
