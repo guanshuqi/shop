@@ -17,7 +17,7 @@ class IndexController extends Controller
             $seat_status[$i]=$status;
         }
         $data=[
-            'search'=>$seat_status
+            'seat'=>$seat_status
         ];
         return view('movie.index',$data);
     }
