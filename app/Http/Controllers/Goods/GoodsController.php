@@ -13,15 +13,15 @@ class GoodsController extends Controller
     //商品详情
     public function index($goods_id){
         $goods_key='h_goods_key_'.$goods_id;
-        //echo $goods_key;
+        echo $goods_key;
         $goods_info=Redis::hGetAll($goods_key);
         if($goods_info){
             echo 'REDIS';echo '</br>';
-            //echo '<pre>';print_r($goods_info);echo '</pre>';
+            echo '<pre>';print_r($goods_info);echo '</pre>';
         }else{
             echo 'MYSQL';echo '</br>';
             $goods_info=GoodsModel::where(['goods_id'=>$goods_id])->first()->toArray();
-            //echo '<pre>';print_r($goods_info);echo '</pre>';
+            echo '<pre>';print_r($goods_info);echo '</pre>';
         }
         //写入缓存
         $res=Redis::hmset($goods_key,$goods_info);
