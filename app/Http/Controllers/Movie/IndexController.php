@@ -25,6 +25,6 @@ class IndexController extends Controller
 
     public function buy($pos,$status){
         $key='test_bit';
-        Redis::setBit($key,$pos,$status);
+        Redis::setbit($key,$pos,$status);
     }
 }
