@@ -13,7 +13,7 @@ class IndexController extends Controller
     }
     //微信接收推送事件
     public function valid1(){
-        echo $_GET['echostr'];
+        echo $_GET['echostr'];die;
         $data=file_get_contents("php://input");
         $log_str=date('Y-m-d H:i:s')."\n".$data."\n<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FTLE_APPEND);
