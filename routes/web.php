@@ -100,3 +100,6 @@ Route::post('/goods/upload/pdf','Goods\GoodsController@uploadDF');
 Route::get('/search','Goods\GoodsController@search');
 Route::get('/movie','Movie\IndexController@index');
 
+//微信开发
+Route::get('/weixin/valid','Weixin\IndexController@valid');
+Route::post('/weixin/valid1','Weixin\IndexController@valid1');
