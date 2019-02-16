@@ -102,4 +102,4 @@ Route::get('/movie','Movie\IndexController@index');
 
 //微信开发
 Route::get('/weixin/valid','Weixin\IndexController@valid');
-Route::post('/weixin/valid1','Weixin\IndexController@valid1');
+Route::get('/weixin/valid1','Weixin\IndexController@valid1');
