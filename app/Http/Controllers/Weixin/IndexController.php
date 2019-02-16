@@ -16,7 +16,7 @@ class IndexController extends Controller
         //echo $_GET['echostr'];
         $data=file_get_contents("php://input");
         $log_str=date('Y-m-d H:i:s')."\n".$data."\n<<<<";
-        file_put_contents('logs/wx_event.log',$log_str,FTLE_APPEND);
+        file_put_contents('/data/wwwroot/default/shop/public/logs/wx_event.log',$log_str,FTLE_APPEND);
     }
 
 
