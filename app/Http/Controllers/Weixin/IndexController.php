@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Redis;
 
-class WeixinController extends Controller
+class IndexController extends Controller
 {
     //
 
