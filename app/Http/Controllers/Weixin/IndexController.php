@@ -44,15 +44,15 @@ class IndexController extends Controller
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
 
         $event = $xml->Event;                       //事件类型
-        var_dump($xml);echo '<hr>';
+        //var_dump($xml);echo '<hr>';
 
         if($event=='subscribe'){
             $openid = $xml->FromUserName;               //用户openid
             $sub_time = $xml->CreateTime;               //扫码关注时间
 
 
-            echo 'openid: '.$openid;echo '</br>';
-            echo '$sub_time: ' . $sub_time;
+            //echo 'openid: '.$openid;echo '</br>';
+            //echo '$sub_time: ' . $sub_time;
 
             //获取用户信息
             $user_info = $this->getUserInfo($openid);
