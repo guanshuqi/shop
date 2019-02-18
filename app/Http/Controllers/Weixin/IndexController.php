@@ -44,7 +44,7 @@ class IndexController extends Controller
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
 
         $event = $xml->Event;                       //事件类型
-        //var_dump($xml);echo '<hr>';
+        var_dump($xml);echo '<hr>';
 
         if($event=='subscribe'){
             $openid = $xml->FromUserName;               //用户openid
@@ -106,7 +106,7 @@ class IndexController extends Controller
     {
 
         //获取缓存
-        $token = Redis::get($this->redis_weixin_access_token);
+        $token = Redis::get7($this->redis_weixin_access_token);
         if(!$token){        // 无缓存 请求微信接口
             $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WEIXIN_APPID').'&secret='.env('WEIXIN_APPSECRET');
             $data = json_decode(file_get_contents($url),true);
