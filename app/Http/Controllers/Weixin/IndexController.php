@@ -142,8 +142,9 @@ class IndexController extends Controller
                 ]
             ]
         ];
+        $body = json_encode($data,JSON_UNESCAPED_UNICODE);//处理中文编码
         $r = $client->request('POST', $url, [
-            'body' => json_encode($data)
+            'body' => $body
         ]);
         //3 解析微信返回信息
         $response_arr=json_decode($r->getBody(),true);
