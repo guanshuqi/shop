@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Redis;
-
+use GuzzleHttp;
 class IndexController extends Controller
 {
     //
@@ -139,6 +139,32 @@ class IndexController extends Controller
      *创建服务器菜单
      */
     public function createMenu(){
+        //1 获取access_token   拼接请求街口
+        $access_token=$this->getWXAccessToken();
+        $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$access_token;
+        //2 请求微信接口
+        $client = new GuzzleHttp\Client(['base_uri' => $url]);
+        $data = [
+            "button"    => [
+                [
+                    "type"  => "view",      // view类型 跳转指定 URL
+                    "name"  => "guanshuqi",
+                    "url"   => "https://www.baidu.com"
+                ]
+            ]
+        ];
+        $r = $client->request('POST', $url, [
+            'body' => json_encode($data)
+        ]);
+        //解析微信返回信息
+        $response_arr=json_decode($r->getBody(),true);
+        echo '<pre>';print_r($response_arr);echo '</pre>';
+        if($response_arr['errcode']==0){
+            echo '菜单创建成功';
+        }else{
+            echo '菜单创建失败'.'</pre>';
+            echo $response_arr['errmsg'];
+        }
 
     }
 
