@@ -139,6 +139,25 @@ class IndexController extends Controller
                     "url"   => "https://www.baidu.com"
                 ],
                 [
+                    "name"=>"发送图片",
+                    "sub_button"=>[
+                        [
+                            "type"=>"pic_photo_or_album",
+                            "name"=>"拍照或者相册发图",
+                            "key"=>"rselfmenu_1_1",
+                            "sub_button"=>[ ]
+                        ],
+                        [
+                            "type"=>"pic_weixin",
+                            "name"=>"微信相册发图",
+                            "key"=>"rselfmenu_1_2",
+                            "sub_button"=>[ ]
+                        ],
+
+                    ],
+
+                ],
+                [
                     "type"  => "click",      // click类型
                     "name"  => "客服",
                     "key"   => "kefu"
