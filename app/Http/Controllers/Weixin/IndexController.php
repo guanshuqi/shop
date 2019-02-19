@@ -33,9 +33,10 @@ class IndexController extends Controller
         //解析XML
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
         $event = $xml->Event;                       //事件类型
+        $openid = $xml->FromUserName;
         //var_dump($xml);echo '<hr>';
         if($event=='subscribe'){
-            $openid = $xml->FromUserName;               //用户openid
+            //用户openid
             $sub_time = $xml->CreateTime;               //扫码关注时间
             echo 'openid: '.$openid;echo '</br>';
             echo '$sub_time: ' . $sub_time;
@@ -61,7 +62,7 @@ class IndexController extends Controller
             }
         }else if($event=='CLICK'){
             if($xml->EventKey=='kefu'){
-                $this->kefu($xml->FromUserName,$xml->ToUserName);
+                $this->kefu($openid,$xml->ToUserName);
             }
         }
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
