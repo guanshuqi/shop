@@ -72,13 +72,7 @@ class IndexController extends Controller
      * 客服处理
      */
     public function kefu($openid,$from){
-        $xml_response='<xml>
-                        <ToUserName>< ![CDATA['.$openid.'] ]></ToUserName>
-                        <FromUserName>< ![CDATA['.$from.'] ]></FromUserName>
-                        <CreateTime>'.time().'</CreateTime>
-                        <MsgType>< ![CDATA[text] ]></MsgType>
-                        <Content>< ![CDATA['.'您好,现在是'.date('Y-m-d H:i:s').'] ]></Content>
-                    </xml>';
+        $xml_response='<xml> <ToUserName>< ![CDATA['.$openid.'] ]></ToUserName> <FromUserName>< ![CDATA['.$from.'] ]></FromUserName> <CreateTime>'.time().'</CreateTime><MsgType>< ![CDATA[text] ]></MsgType><Content>< ![CDATA['.'您好,现在是'.date('Y-m-d H:i:s').'] ]></Content> </xml>';
         echo $xml_response;
     }
     /*
