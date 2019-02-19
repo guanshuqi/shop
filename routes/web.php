@@ -102,4 +102,5 @@ Route::get('/movie','Movie\IndexController@index');
 //微信开发
 Route::get('/weixin/vaild','Weixin\IndexController@vaild');
 Route::post('/weixin/vaild1','Weixin\IndexController@vaild1');
+Route::get('/createMenu','Weixin\IndexController@createMenu');
 
