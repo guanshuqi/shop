@@ -17,8 +17,7 @@ class IndexController extends Controller
     public function test()
     {
         //echo __METHOD__;
-        //$this->getWXAccessToken();
-        $this->getUserInfo(1);
+        echo 'token:'.$this->getWXAccessToken();
     }
 
     /**
@@ -136,6 +135,12 @@ class IndexController extends Controller
     }
 
 
+    /*
+     *创建服务器菜单
+     */
+    public function createMenu(){
+
+    }
 
 
 }
