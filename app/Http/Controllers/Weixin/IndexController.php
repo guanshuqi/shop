@@ -142,6 +142,7 @@ class IndexController extends Controller
         //1 获取access_token   拼接请求街口
         $access_token=$this->getWXAccessToken();
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$access_token;
+        echo $url;
         //2 请求微信接口
         $client = new GuzzleHttp\Client(['base_uri' => $url]);
         $data = [
