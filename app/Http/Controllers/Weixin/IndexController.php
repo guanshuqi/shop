@@ -35,6 +35,15 @@ class IndexController extends Controller
         $event = $xml->Event;                       //事件类型
         $openid = $xml->FromUserName;
         //var_dump($xml);echo '<hr>';
+        //处理用户发送信息
+        if(isset($xml->MsgType)){
+            if($xml->MsgType=='text'){
+                $msg=$xml->Content;
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
+            }
+        }
+        //判断事件类型
         if($event=='subscribe'){
             //用户openid
             $sub_time = $xml->CreateTime;               //扫码关注时间
@@ -125,7 +134,7 @@ class IndexController extends Controller
      *创建服务器菜单
      */
     public function createMenu(){
-        //1 获取access_token   拼接请求街口
+        //1 获取access_token   拼接请求接口
         $access_token=$this->getWXAccessToken();
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$access_token;
         //echo $url;
@@ -155,7 +164,6 @@ class IndexController extends Controller
                         ],
 
                     ],
-
                 ],
                 [
                     "type"  => "click",      // click类型
