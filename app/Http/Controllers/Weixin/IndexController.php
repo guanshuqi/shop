@@ -61,7 +61,7 @@ class IndexController extends Controller
             }
         }else if($event=='CLICK'){
             if($xml->eventKey=='kefu'){
-                $this->kefu($openid,$xml->ToUserName);
+                $this->kefu($xml->FromUserName,$xml->ToUserName);
             }
         }
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
