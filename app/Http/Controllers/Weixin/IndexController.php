@@ -41,7 +41,15 @@ class IndexController extends Controller
                 $msg=$xml->Content;
                 $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
                 echo $xml_response;
+            }else if($xml->MsgType=='image'){
+                //视业务需求是否需要下载保存图片
+                if(1){  //下载图片素材
+                    $this->dlWxImg($xml->MediaId);
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                    echo $xml_response;
+                }
             }
+            exit();
         }
         //判断事件类型
         if($event=='subscribe'){
@@ -86,6 +94,26 @@ class IndexController extends Controller
         // 文本消息
         $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$from.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '你好，现在是北京时间：'. date('Y-m-d H:i:s') .']]></Content></xml>';
         echo $xml_response;
+    }
+    /**
+     * 下载图片素材
+     */
+    public function dlWxImg($media_id){
+        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+        //保存图片
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+        $wx_image_path = 'wx/images/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+            echo '保存成功';
+        }else{      //保存失败
+            echo '保存失败';
+        }
     }
     /*
      * 接收事件推送
@@ -186,4 +214,15 @@ class IndexController extends Controller
             echo $response_arr['errmsg'];
         }
     }
+//    /**
+//     * 保存素材信息
+//     */
+//    public function getMessage(){
+//        $data = file_get_contents("php://input");
+//        //解析XML
+//        $xml = simplexml_load_string($data);
+//        //1 获取access_token   拼接请求接口
+//        $access_token=$this->getWXAccessToken();
+//        $url='ttps://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token&media_id=$xml->MediaId;
+//    }
 }
