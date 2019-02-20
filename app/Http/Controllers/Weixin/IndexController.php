@@ -108,7 +108,7 @@ class IndexController extends Controller
         //获取文件名
         $file_info = $response->getHeader('Content-disposition');
         $file_name = substr(rtrim($file_info[0],'"'),-20);
-        $wx_image_path = 'wx/images/'.$file_name;
+        $wx_image_path = 'weixin/images/'.$file_name;
         //保存图片
         $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
         if($r){     //保存成功
