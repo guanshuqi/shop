@@ -16,7 +16,7 @@ class WeixinMediaController extends Controller
 
 
 
-    
+
     /**
      * Index interface.
      *
