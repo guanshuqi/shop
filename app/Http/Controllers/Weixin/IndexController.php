@@ -55,7 +55,7 @@ class IndexController extends Controller
                 //视业务需求是否需要下载保存图片
                 if (1) {  //下载图片素材
                     $file_name = $this->dlWxImg($xml->MediaId);
-                    $xml_response = '<xml><ToUserName><![CDATA[' . $openid . ']]></ToUserName><FromUserName><![CDATA[' . $xml->ToUserName . ']]></FromUserName><CreateTime>' . time() . '</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[' . date('Y-m-d H:i:s') . ']]></Content></xml>';
+                    $xml_response = '<xml><ToUserName><![CDATA[' . $openid . ']]></ToUserName><FromUserName><![CDATA[' . $xml->ToUserName . ']]></FromUserName><CreateTime>' . time() . '</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[' .str_random(10). date('Y-m-d H:i:s') . ']]></Content></xml>';
                     echo $xml_response;
 
                     //写入数据库
@@ -74,6 +74,8 @@ class IndexController extends Controller
                 }
             } elseif ($xml->MsgType == 'voice') {
                 $this->dlVoice($xml->MediaId);
+                $xml_response = '<xml><ToUserName><![CDATA[' . $openid . ']]></ToUserName><FromUserName><![CDATA[' . $xml->ToUserName . ']]></FromUserName><CreateTime>' . time() . '</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[' .str_random(10). date('Y-m-d H:i:s') . ']]></Content></xml>';
+                echo $xml_response;
             } elseif ($xml->MsgType == 'event') {      //判断事件类型
                 if ($event == 'subscribe') {                        //扫码关注事件
                     $sub_time = $xml->CreateTime;               //扫码关注时间
