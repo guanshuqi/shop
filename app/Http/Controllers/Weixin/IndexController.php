@@ -36,6 +36,7 @@ class IndexController extends Controller
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
         $event = $xml->Event;                       //事件类型
         $openid = $xml->FromUserName;
+        file_put_contents('logs/wx_event.log',$xml,FILE_APPEND);
         //var_dump($xml);echo '<hr>';
         //处理用户发送信息
         if(isset($xml->MsgType)){
