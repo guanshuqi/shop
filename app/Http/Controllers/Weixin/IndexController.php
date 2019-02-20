@@ -215,15 +215,5 @@ class IndexController extends Controller
             echo $response_arr['errmsg'];
         }
     }
-//    /**
-//     * 保存素材信息
-//     */
-//    public function getMessage(){
-//        $data = file_get_contents("php://input");
-//        //解析XML
-//        $xml = simplexml_load_string($data);
-//        //1 获取access_token   拼接请求接口
-//        $access_token=$this->getWXAccessToken();
-//        $url='ttps://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token&media_id=$xml->MediaId;
-//    }
+
 }
