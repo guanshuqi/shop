@@ -86,7 +86,6 @@ class IndexController extends Controller
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
     }
-
     /**
      * 客服处理
      */
@@ -191,7 +190,6 @@ class IndexController extends Controller
                             "key"=>"rselfmenu_1_2",
                             "sub_button"=>[ ]
                         ],
-
                     ],
                 ],
                 [
@@ -215,5 +213,4 @@ class IndexController extends Controller
             echo $response_arr['errmsg'];
         }
     }
-
 }
