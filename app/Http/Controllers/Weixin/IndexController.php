@@ -42,6 +42,7 @@ class IndexController extends Controller
                 $msg=$xml->Content;
                 $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
                 echo $xml_response;
+                exit;
             }else if($xml->MsgType=='image'){
                 //视业务需求是否需要下载保存图片
                 //下载图片素材
@@ -49,9 +50,9 @@ class IndexController extends Controller
                     $this->dlWxImg($xml->MediaId);
                     $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                     echo $xml_response;
+                    exit;
                 }
             }
-            exit();
         }
         //判断事件类型
         if($event=='subscribe'){
