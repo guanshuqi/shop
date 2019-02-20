@@ -72,7 +72,7 @@ class IndexController extends Controller
                     $m_id = WeixinMedia::insertGetId($data);
                     var_dump($m_id);
                 }
-            } elseif ($event = 'video') {   
+            } elseif ($xml->MsgType = 'voice') {
                 $this->dlVoice($xml->MediaId);
             } elseif ($xml->MsgType == 'event') {      //判断事件类型
                 if ($event == 'subscribe') {                        //扫码关注事件
