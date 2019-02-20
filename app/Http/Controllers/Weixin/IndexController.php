@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Weixin;
 use App\Model\WeixinUser;
-use App\Model\weixinMedia;
+use App\Model\WeixinMedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
