@@ -14,9 +14,6 @@ class WeixinMediaController extends Controller
 {
     use HasResourceActions;
 
-
-
-
     /**
      * Index interface.
      *
@@ -34,7 +31,7 @@ class WeixinMediaController extends Controller
     /**
      * Show interface.
      *
-     * @param mixed $id
+     * @param mixed   $id
      * @param Content $content
      * @return Content
      */
@@ -49,7 +46,7 @@ class WeixinMediaController extends Controller
     /**
      * Edit interface.
      *
-     * @param mixed $id
+     * @param mixed   $id
      * @param Content $content
      * @return Content
      */
@@ -84,7 +81,15 @@ class WeixinMediaController extends Controller
     {
         $grid = new Grid(new WeixinMedia);
 
-
+        $grid->id('Id');
+        $grid->openid('Openid');
+        $grid->add_time('Add time');
+        $grid->msg_type('Msg type');
+        $grid->media_id('Media id');
+        $grid->format('Format');
+        $grid->msg_id('Msg id');
+        $grid->local_file_name('Local file name');
+        $grid->local_file_path('Local file path');
 
         return $grid;
     }
@@ -92,14 +97,22 @@ class WeixinMediaController extends Controller
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param mixed   $id
      * @return Show
      */
     protected function detail($id)
     {
         $show = new Show(WeixinMedia::findOrFail($id));
 
-
+        $show->id('Id');
+        $show->openid('Openid');
+        $show->add_time('Add time');
+        $show->msg_type('Msg type');
+        $show->media_id('Media id');
+        $show->format('Format');
+        $show->msg_id('Msg id');
+        $show->local_file_name('Local file name');
+        $show->local_file_path('Local file path');
 
         return $show;
     }
@@ -113,7 +126,14 @@ class WeixinMediaController extends Controller
     {
         $form = new Form(new WeixinMedia);
 
-
+        $form->text('openid', 'Openid');
+        $form->number('add_time', 'Add time');
+        $form->text('msg_type', 'Msg type');
+        $form->text('media_id', 'Media id');
+        $form->text('format', 'Format');
+        $form->text('msg_id', 'Msg id');
+        $form->text('local_file_name', 'Local file name');
+        $form->text('local_file_path', 'Local file path');
 
         return $form;
     }
