@@ -33,10 +33,11 @@ class IndexController extends Controller
     {
         $data = file_get_contents("php://input");
         //解析XML
+         file_put_contents('logs/wx_event.log',$data,FILE_APPEND);
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
         $event = $xml->Event;                       //事件类型
         $openid = $xml->FromUserName;
-        file_put_contents('logs/wx_event.log',$xml,FILE_APPEND);
+
         //var_dump($xml);echo '<hr>';
         //处理用户发送信息
         if(isset($xml->MsgType)){
@@ -48,6 +49,7 @@ class IndexController extends Controller
                 //视业务需求是否需要下载保存图片
                 //下载图片素材
                 if(1){
+
                     $file_name=$this->dlWxImg($xml->MediaId);
                     $data = [
                         'openid'    => $openid,
@@ -60,7 +62,7 @@ class IndexController extends Controller
                     ];
 
                     $m_id = WeixinMedia::insertGetId($data);
-                    var_dump($m_id); die;
+                    var_dump($m_id);
                     $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                     echo $xml_response;
                     //写入数据库
