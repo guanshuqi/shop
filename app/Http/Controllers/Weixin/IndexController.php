@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp;
+use Illuminate\Support\Facades\Storage;
 class IndexController extends Controller
 {
     //
@@ -33,9 +34,27 @@ class IndexController extends Controller
         //解析XML
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
         $event = $xml->Event;                       //事件类型
+        $openid = $xml->FromUserName;
         //var_dump($xml);echo '<hr>';
+        //处理用户发送信息
+        if(isset($xml->MsgType)){
+            if($xml->MsgType=='text'){
+                $msg=$xml->Content;
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
+            }else if($xml->MsgType=='image'){
+                //视业务需求是否需要下载保存图片
+                //下载图片素材
+                if(1){
+                    $this->dlWxImg($xml->MediaId);
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                    echo $xml_response;
+                }
+            }
+        }
+        //判断事件类型
         if($event=='subscribe'){
-            $openid = $xml->FromUserName;               //用户openid
+            //用户openid
             $sub_time = $xml->CreateTime;               //扫码关注时间
             echo 'openid: '.$openid;echo '</br>';
             echo '$sub_time: ' . $sub_time;
@@ -60,20 +79,41 @@ class IndexController extends Controller
                 var_dump($id);
             }
         }else if($event=='CLICK'){
-            if($xml->eventKey=='kefu'){
+            if($xml->EventKey=='kefu'){
                 $this->kefu($openid,$xml->ToUserName);
             }
         }
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
     }
-
     /**
      * 客服处理
      */
-    public function kefu($openid,$from){
-        $xml_response='<xml> <ToUserName>< ![CDATA['.$openid.'] ]></ToUserName> <FromUserName>< ![CDATA['.$from.'] ]></FromUserName> <CreateTime>'.time().'</CreateTime> <MsgType>< ![CDATA[text] ]></MsgType> <Content>< ![CDATA['.'您好,现在是'.date('Y-m-d H:i:s').'] ]></Content> </xml>';
+    public function kefu($openid,$from)
+    {
+        // 文本消息
+        $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$from.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. 'Hello World, 现在时间'. date('Y-m-d H:i:s') .']]></Content></xml>';
         echo $xml_response;
+    }
+    /**
+     * 下载图片素材
+     */
+    public function dlWxImg($media_id){
+        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+        //保存图片
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+        $wx_image_path = 'weixin/images/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+            echo '保存成功';
+        }else{      //保存失败
+            echo '保存失败';
+        }
     }
     /*
      * 接收事件推送
@@ -122,7 +162,7 @@ class IndexController extends Controller
      *创建服务器菜单
      */
     public function createMenu(){
-        //1 获取access_token   拼接请求街口
+        //1 获取access_token   拼接请求接口
         $access_token=$this->getWXAccessToken();
         $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$access_token;
         //echo $url;
@@ -136,14 +176,32 @@ class IndexController extends Controller
                     "url"   => "https://www.baidu.com"
                 ],
                 [
+                    "name"=>"发送图片",
+                    "sub_button"=>[
+                        [
+                            "type"=>"pic_photo_or_album",
+                            "name"=>"拍照或者相册发图",
+                            "key"=>"rselfmenu_1_1",
+                            "sub_button"=>[ ]
+                        ],
+                        [
+                            "type"=>"pic_weixin",
+                            "name"=>"微信相册发图",
+                            "key"=>"rselfmenu_1_2",
+                            "sub_button"=>[ ]
+                        ],
+                    ],
+                ],
+                [
                     "type"  => "click",      // click类型
                     "name"  => "客服",
                     "key"   => "kefu"
                 ]
             ]
         ];
+        $body = json_encode($data,JSON_UNESCAPED_UNICODE);//处理中文编码
         $r = $client->request('POST', $url, [
-            'body' => json_encode($data)
+            'body' => $body
         ]);
         //3 解析微信返回信息
         $response_arr=json_decode($r->getBody(),true);
