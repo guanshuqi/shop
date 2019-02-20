@@ -138,6 +138,7 @@ class IndexController extends Controller
         }else{      //保存失败
             echo '保存失败';
         }
+        return $file_name;
     }
     /**
      * 下载语音文件
