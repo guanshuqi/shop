@@ -48,9 +48,6 @@ class IndexController extends Controller
                 //下载图片素材
                 if(1){
                     $file_name=$this->dlWxImg($xml->MediaId);
-                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
-                    echo $xml_response;
-                    //写入数据库
                     $data = [
                         'openid'    => $openid,
                         'add_time'  => time(),
@@ -62,7 +59,11 @@ class IndexController extends Controller
                     ];
 
                     $m_id = WeixinMedia::insertGetId($data);
-                    var_dump($m_id);
+                    var_dump($m_id); die;
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                    echo $xml_response;
+                    //写入数据库
+
                 }
             }
         }
