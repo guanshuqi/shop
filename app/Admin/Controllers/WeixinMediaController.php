@@ -14,6 +14,9 @@ class WeixinMediaController extends Controller
 {
     use HasResourceActions;
 
+
+
+    
     /**
      * Index interface.
      *
