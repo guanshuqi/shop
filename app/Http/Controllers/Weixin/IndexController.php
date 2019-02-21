@@ -311,39 +311,43 @@ class IndexController extends Controller
      */
     public function all()
     {
-        $a=$_POST;
-        $access_token = $this->getWXAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token='.$access_token;
-        //var_dump($url);exit;
-        $client = new GuzzleHttp\Client(['base_url' => $url]);
-        $param = [
-            "filter"=>[
-                "is_to_all"=>true
-            ],
-            "text"=>[
-                "content"=>$a
-            ],
-            "msgtype"=>"text"
-        ];
-        ///var_dump($param);exit;
-        $r = $client->Request('POST', $url, [
-            'body' => json_encode($param, JSON_UNESCAPED_UNICODE)
-        ]);
-        //var_dump($r);exit;
-        $response_arr = json_decode($r->getBody(), true);
-        //echo '<pre>';
-        //print_r($response_arr);
-        // echo '</pre>';
+        if(request()->isMethod('post')) {
+            $a = $_POST;
+            $access_token = $this->getWXAccessToken();
+            $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=' . $access_token;
+            //var_dump($url);exit;
+            $client = new GuzzleHttp\Client(['base_url' => $url]);
+            $param = [
+                "filter" => [
+                    "is_to_all" => true
+                ],
+                "text" => [
+                    "content" => $a
+                ],
+                "msgtype" => "text"
+            ];
+            ///var_dump($param);exit;
+            $r = $client->Request('POST', $url, [
+                'body' => json_encode($param, JSON_UNESCAPED_UNICODE)
+            ]);
+            //var_dump($r);exit;
+            $response_arr = json_decode($r->getBody(), true);
+            //echo '<pre>';
+            //print_r($response_arr);
+            // echo '</pre>';
 
-        if ($response_arr['errcode'] == 0) {
-            echo "发送成功";
-        } else {
-            echo "发送失败";
-            echo '</br>';
-            echo $response_arr['errmsg'];
+            if ($response_arr['errcode'] == 0) {
+                echo "发送成功";
+            } else {
+                echo "发送失败";
+                echo '</br>';
+                echo $response_arr['errmsg'];
 
+            }
+        }else{
+            return view('weixin.weixin');
         }
-        return view('weixin.weixin');
+
 
     }
     /**
