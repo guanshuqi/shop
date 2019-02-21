@@ -181,6 +181,7 @@ class IndexController extends Controller
         }else{      //保存失败
 
         }
+        return $file_name;
     }
     /**
      * 下载视频文件
@@ -206,6 +207,7 @@ class IndexController extends Controller
         }else{      //保存失败
 
         }
+        return $file_name;
     }
     /*
      * 接收事件推送

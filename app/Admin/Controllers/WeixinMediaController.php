@@ -88,8 +88,15 @@ class WeixinMediaController extends Controller
         $grid->media_id('Media id');
         $grid->format('Format');
         $grid->msg_id('Msg id');
-        $grid->local_file_name('Local file name')->display(function($wx_image_path){
-            return '<img src="https://gsqq.52self.cn/wx/images/'.$wx_image_path.'" width="50px" height="50px">';
+        $grid->local_file_name('Local file name')->display(function($file_name){
+            if(substr($file_name,-3,3)=='mp4'){
+                $common="<a href='https://gsqq.52self.cn/admin/wxMedia/wx/video/".$file_name."'>下载视频</a>";
+            }elseif(substr($file_name,-3,3)=='amr'){
+                $common="<a href='https://gsqq.52self.cn/admin/wxMedia/wx/voice/".$file_name."'>下载语音</a>";
+            }else{
+                $common='<img src="https://gsqq.52self.cn/admin/wxMedia/wx/image/'.$file_name.'">';
+            }
+            return $common;
         });
         $grid->local_file_path('Local file path');
 
