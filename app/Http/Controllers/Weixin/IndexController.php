@@ -311,6 +311,7 @@ class IndexController extends Controller
      */
     public function all()
     {
+        $a=$_POST;
         $access_token = $this->getWXAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token='.$access_token;
         //var_dump($url);exit;
@@ -320,7 +321,7 @@ class IndexController extends Controller
                 "is_to_all"=>true
             ],
             "text"=>[
-                "content"=>"苗博学是傻子."
+                "content"=>$a
             ],
             "msgtype"=>"text"
         ];
