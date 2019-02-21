@@ -3,7 +3,7 @@
     <form class="form-inline" action="/all" method="post">
         {{csrf_field()}}
         <div class="form-group">
-            <label class="sr-only" for="goods_num">群发消息</label>
+            <label class="sr-only">群发消息</label>
             <div class="input-group">
                 <input type="text" class="form-control" name="aaa">
             </div>
