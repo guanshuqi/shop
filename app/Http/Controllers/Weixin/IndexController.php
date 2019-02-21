@@ -341,6 +341,7 @@ class IndexController extends Controller
     {
         if(request()->isMethod('post')) {
             $a = $_POST;
+            print_r($_POST);die;
             $access_token = $this->getWXAccessToken();
             $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=' . $access_token;
             //var_dump($url);exit;
