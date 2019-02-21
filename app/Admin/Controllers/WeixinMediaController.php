@@ -90,11 +90,11 @@ class WeixinMediaController extends Controller
         $grid->msg_id('Msg id');
         $grid->local_file_name('Local file name')->display(function($file_name){
             if(substr($file_name,-3,3)=='mp4'){
-                $common="<a href='https://gsqq.52self.cn/admin/wxMedia/wx/video/".$file_name."'>下载视频</a>";
+                $common="<a href='https://gsqq.52self.cn/wx/video/".$file_name."'>下载视频</a>";
             }elseif(substr($file_name,-3,3)=='amr'){
-                $common="<a href='https://gsqq.52self.cn/admin/wxMedia/wx/voice/".$file_name."'>下载语音</a>";
+                $common="<a href='https://gsqq.52self.cn/wx/voice/".$file_name."'>下载语音</a>";
             }else{
-                $common='<img src="https://gsqq.52self.cn/admin/wxMedia/wx/images/'.$file_name.'" width="100px" height="100px">';
+                $common='<img src="https://gsqq.52self.cn/wx/images/'.$file_name.'" width="100px" height="100px">';
             }
             return $common;
         });
