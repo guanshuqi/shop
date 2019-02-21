@@ -104,7 +104,7 @@ Route::get('/weixin/vaild','Weixin\IndexController@vaild');
 Route::post('/weixin/vaild1','Weixin\IndexController@vaild1');
 Route::get('/all','Weixin\IndexController@all');
 //创建菜单
-Route::get('/createMenu','Weixin\IndexController@createMenu');
+Route::post('/createMenu','Weixin\IndexController@createMenu');
 
 //微信
 Route::get('/weixin/test','Weixin\IndexController@test');//获取access_token
