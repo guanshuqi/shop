@@ -1,13 +1,18 @@
-@extends('user.bst')
-@section('content')
-    <form class="form-inline" action="/all" method="post">
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Laravel-Blade</title>
+</head>
+<body>
+    <form action="/formShow" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
-        <div class="form-group">
-            <label class="sr-only">群发消息</label>
-            <div class="input-group">
-                <input type="text" class="form-control" name="aaa">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary" id="add_cart_btn">提交</button>
+        <input type="text" name="aaa"><br><br>
+        <input type="file" name="media"><br><br>
+        <input type="submit" value="提交">
     </form>
-@endsection
+</body>
+</html>
