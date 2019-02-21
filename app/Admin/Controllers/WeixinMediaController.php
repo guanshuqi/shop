@@ -94,7 +94,7 @@ class WeixinMediaController extends Controller
             }elseif(substr($file_name,-3,3)=='amr'){
                 $common="<a href='https://gsqq.52self.cn/admin/wxMedia/wx/voice/".$file_name."'>下载语音</a>";
             }else{
-                $common='<img src="https://gsqq.52self.cn/admin/wxMedia/wx/image/'.$file_name.'" width="100px" height="100px">';
+                $common='<img src="https://gsqq.52self.cn/admin/wxMedia/wx/images/'.$file_name.'" width="100px" height="100px">';
             }
             return $common;
         });
