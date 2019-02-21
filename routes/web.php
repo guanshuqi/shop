@@ -114,3 +114,4 @@ Route::post('/weixin/valid1','Weixin\IndexController@wxEvent');        //接收�
 //Route::post('/weixin/valid','Weixin\IndexController@validToken');
 //创建菜单
 Route::get('/createMenu','Weixin\IndexController@createMenu');
+Route::get('/addMaterial','Weixin\IndexController@addMaterial');

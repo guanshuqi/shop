@@ -342,6 +342,15 @@ class IndexController extends Controller
             echo $response_arr['errmsg'];
 
         }
+        return view('weixin.weixin');
+
+    }
+    /**
+     * 新增永久素材
+     */
+    public function addMaterial(){
+        $access_token=$this->getWXAccessToken();
+        $url='https://api.weixin.qq.com/cgi-bin/material/add_material?access_token='.$access_token.'&type=image';
 
     }
 }
