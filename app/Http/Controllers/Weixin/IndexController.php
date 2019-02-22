@@ -164,11 +164,72 @@ class IndexController extends Controller
         //$h = $response->getHeaders();
         //echo '<pre>';print_r($h);echo '</pre>';die;
 
+<<<<<<< HEAD
+=======
         //获取文件名
         $file_info = $response->getHeader('Content-disposition');
 
         $file_name = substr(rtrim($file_info[0],'"'),-20);
 
+        $wx_image_path = 'wx/images/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+            //echo 'OK';
+        }else{      //保存失败
+            //echo 'NO';
+        }
+
+        return $file_name;
+
+
+    }
+
+    /**
+     * 下载语音文件
+     * @param $media_id
+     */
+    public function dlVoice($media_id)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //$h = $response->getHeaders();
+        //echo '<pre>';print_r($h);echo '</pre>';die;
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+
+        $wx_image_path = 'wx/voice/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+
+        }else{      //保存失败
+
+        }
+        return $file_name;
+    }
+    /**
+     * 下载视频文件
+     * @param $media_id
+     */
+    public function dlVideo($media_id)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //$h = $response->getHeaders();
+        //echo '<pre>';print_r($h);echo '</pre>';die;
+>>>>>>> weixin
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+
+<<<<<<< HEAD
         $wx_image_path = 'wx/images/'.$file_name;
         //保存图片
         $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
@@ -233,6 +294,16 @@ class IndexController extends Controller
         }else{      //保存失败
 
         }
+=======
+        $wx_image_path = 'wx/video/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+
+        }else{      //保存失败
+
+        }
+>>>>>>> weixin
         return $file_name;
     }
     /*
@@ -459,7 +530,15 @@ class IndexController extends Controller
      */
     public function formTest(){
         return view('weixin.weixin');
+<<<<<<< HEAD
         
+=======
+
+
+
+
+
+>>>>>>> weixin
     }
     public function formShow(Request $request){
 //        echo '<pre>';print_r($_POST);echo '</pre>';echo '<hr>';
