@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Weixin;
 use App\Model\WeixinUser;
+use App\Model\WeixinMedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
@@ -31,60 +32,113 @@ class IndexController extends Controller
     public function wxEvent()
     {
         $data = file_get_contents("php://input");
+
+
         //解析XML
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
-        $event = $xml->Event;                       //事件类型
-        $openid = $xml->FromUserName;
-        //var_dump($xml);echo '<hr>';
-        //处理用户发送信息
-        if(isset($xml->MsgType)){
-            if($xml->MsgType=='text'){
-                $msg=$xml->Content;
-                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
-                echo $xml_response;
-            }else if($xml->MsgType=='image'){
-                //视业务需求是否需要下载保存图片
-                //下载图片素材
-                if(1){
-                    $this->dlWxImg($xml->MediaId);
-                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
-                    echo $xml_response;
-                }
-            }
-        }
-        //判断事件类型
-        if($event=='subscribe'){
-            //用户openid
-            $sub_time = $xml->CreateTime;               //扫码关注时间
-            echo 'openid: '.$openid;echo '</br>';
-            echo '$sub_time: ' . $sub_time;
-            //获取用户信息
-            $user_info = $this->getUserInfo($openid);
-            echo '<pre>';print_r($user_info);echo '</pre>';
-            //保存用户信息
-            $u = WeixinUser::where(['openid'=>$openid])->first();
-            //var_dump($u);die;
-            if($u){       //用户不存在
-                echo '用户已存在';
-            }else{
-                $user_data = [
-                    'openid'            => $openid,
-                    'add_time'          => time(),
-                    'nickname'          => $user_info['nickname'],
-                    'sex'               => $user_info['sex'],
-                    'headimgurl'        => $user_info['headimgurl'],
-                    'subscribe_time'    => $sub_time,
-                ];
-                $id = WeixinUser::insertGetId($user_data);      //保存用户信息
-                var_dump($id);
-            }
-        }else if($event=='CLICK'){
-            if($xml->EventKey=='kefu'){
-                $this->kefu($openid,$xml->ToUserName);
-            }
-        }
+
+        //记录日志
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
+
+        $event = $xml->Event;                       //事件类型
+        $openid = $xml->FromUserName;               //用户openid
+
+
+        // 处理用户发送消息
+        if(isset($xml->MsgType)){
+            if($xml->MsgType=='text'){            //用户发送文本消息
+                $msg = $xml->Content;
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
+            }elseif($xml->MsgType=='image'){       //用户发送图片信息
+                //视业务需求是否需要下载保存图片
+                if(1){  //下载图片素材
+                    $file_name = $this->dlWxImg($xml->MediaId);
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. date('Y-m-d H:i:s') .']]></Content></xml>';
+                    echo $xml_response;
+
+                    //写入数据库
+                    $data = [
+                        'openid'    => $openid,
+                        'add_time'  => time(),
+                        'msg_type'  => 'image',
+                        'media_id'  => $xml->MediaId,
+                        'format'    => $xml->Format,
+                        'msg_id'    => $xml->MsgId,
+                        'local_file_name'   => $file_name
+                    ];
+
+                    $m_id = WeixinMedia::insertGetId($data);
+                    var_dump($m_id);
+                }
+            }elseif($xml->MsgType=='voice'){        //处理语音信息
+                $file_name=$this->dlVoice($xml->MediaId);
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
+                //写入数据库
+                $data = [
+                    'openid'    => $openid,
+                    'add_time'  => time(),
+                    'msg_type'  => 'voice',
+                    'media_id'  => $xml->MediaId,
+                    'format'    => $xml->Format,
+                    'msg_id'    => $xml->MsgId,
+                    'local_file_name'   => $file_name
+                ];
+
+                $m_id = WeixinMedia::insertGetId($data);
+                var_dump($m_id);
+            }elseif($xml->MsgType=='event'){        //判断事件类型
+
+                if($event=='subscribe'){                        //扫码关注事件
+                    $sub_time = $xml->CreateTime;               //扫码关注时间
+                    //获取用户信息
+                    $user_info = $this->getUserInfo($openid);
+
+                    //保存用户信息
+                    $u = WeixinUser::where(['openid'=>$openid])->first();
+                    if($u){       //用户不存在
+                        //echo '用户已存在';
+                    }else{
+                        $user_data = [
+                            'openid'            => $openid,
+                            'add_time'          => time(),
+                            'nickname'          => $user_info['nickname'],
+                            'sex'               => $user_info['sex'],
+                            'headimgurl'        => $user_info['headimgurl'],
+                            'subscribe_time'    => $sub_time,
+                        ];
+
+                        $id = WeixinUser::insertGetId($user_data);      //保存用户信息
+                        //var_dump($id);
+                    }
+                }elseif($event=='CLICK'){               //click 菜单
+                    if($xml->EventKey=='kefu'){       // 根据 EventKey判断菜单
+                        $this->kefu($openid,$xml->ToUserName);
+                    }
+                }
+
+            }elseif($xml->MsgType=='video'){
+                $file_name=$this->dlVideo($xml->MediaId);
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
+                //写入数据库
+                $data = [
+                    'openid'    => $openid,
+                    'add_time'  => time(),
+                    'msg_type'  => 'video',
+                    'media_id'  => $xml->MediaId,
+                    'format'    => $xml->Format,
+                    'msg_id'    => $xml->MsgId,
+                    'local_file_name'   => $file_name
+                ];
+
+                $m_id = WeixinMedia::insertGetId($data);
+                var_dump($m_id);
+            }
+
+        }
     }
     /**
      * 客服处理
@@ -97,23 +151,89 @@ class IndexController extends Controller
     }
     /**
      * 下载图片素材
+     * @param $media_id
      */
-    public function dlWxImg($media_id){
-        $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+    public function dlWxImg($media_id)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+        //echo $url;echo '</br>';
+
         //保存图片
         $client = new GuzzleHttp\Client();
         $response = $client->get($url);
+        //$h = $response->getHeaders();
+        //echo '<pre>';print_r($h);echo '</pre>';die;
+
         //获取文件名
         $file_info = $response->getHeader('Content-disposition');
+
         $file_name = substr(rtrim($file_info[0],'"'),-20);
-        $wx_image_path = 'weixin/images/'.$file_name;
+
+        $wx_image_path = 'wx/images/'.$file_name;
         //保存图片
         $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
         if($r){     //保存成功
-            echo '保存成功';
+            //echo 'OK';
         }else{      //保存失败
-            echo '保存失败';
+            //echo 'NO';
         }
+
+        return $file_name;
+
+
+    }
+
+    /**
+     * 下载语音文件
+     * @param $media_id
+     */
+    public function dlVoice($media_id)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //$h = $response->getHeaders();
+        //echo '<pre>';print_r($h);echo '</pre>';die;
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+
+        $wx_image_path = 'wx/voice/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+
+        }else{      //保存失败
+
+        }
+        return $file_name;
+    }
+    /**
+     * 下载视频文件
+     * @param $media_id
+     */
+    public function dlVideo($media_id)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->getWXAccessToken().'&media_id='.$media_id;
+
+        $client = new GuzzleHttp\Client();
+        $response = $client->get($url);
+        //$h = $response->getHeaders();
+        //echo '<pre>';print_r($h);echo '</pre>';die;
+        //获取文件名
+        $file_info = $response->getHeader('Content-disposition');
+        $file_name = substr(rtrim($file_info[0],'"'),-20);
+
+        $wx_image_path = 'wx/video/'.$file_name;
+        //保存图片
+        $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
+        if($r){     //保存成功
+
+        }else{      //保存失败
+
+        }
+        return $file_name;
     }
     /*
      * 接收事件推送
@@ -219,37 +339,152 @@ class IndexController extends Controller
      */
     public function all()
     {
-        $access_token = $this->getWXAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token='.$access_token;
-        //var_dump($url);exit;
-        $client = new GuzzleHttp\Client(['base_url' => $url]);
-        $param = [
-            "filter"=>[
-                "is_to_all"=>true
-            ],
-            "text"=>[
-                "content"=>"苗博学是傻子."
-            ],
-            "msgtype"=>"text"
-        ];
-        ///var_dump($param);exit;
-        $r = $client->Request('POST', $url, [
-            'body' => json_encode($param, JSON_UNESCAPED_UNICODE)
-        ]);
-        //var_dump($r);exit;
-        $response_arr = json_decode($r->getBody(), true);
-        //echo '<pre>';
-        //print_r($response_arr);
-        // echo '</pre>';
+        if(request()->isMethod('post')) {
+            $a = $_POST;
+            print_r($_POST);die;
+            $access_token = $this->getWXAccessToken();
+            $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=' . $access_token;
+            //var_dump($url);exit;
+            $client = new GuzzleHttp\Client(['base_url' => $url]);
+            $param = [
+                "filter" => [
+                    "is_to_all" => true
+                ],
+                "text" => [
+                    "content" => $a
+                ],
+                "msgtype" => "text"
+            ];
+            ///var_dump($param);exit;
+            $r = $client->Request('POST', $url, [
+                'body' => json_encode($param, JSON_UNESCAPED_UNICODE)
+            ]);
+            //var_dump($r);exit;
+            $response_arr = json_decode($r->getBody(), true);
+            //echo '<pre>';
+            //print_r($response_arr);
+            // echo '</pre>';
 
-        if ($response_arr['errcode'] == 0) {
-            echo "发送成功";
-        } else {
-            echo "发送失败";
-            echo '</br>';
-            echo $response_arr['errmsg'];
+            if ($response_arr['errcode'] == 0) {
+                echo "发送成功";
+            } else {
+                echo "发送失败";
+                echo '</br>';
+                echo $response_arr['errmsg'];
 
+            }
+        }else{
+            return view('weixin.weixin');
         }
 
+
+    }
+    /**
+     * 上传素材
+     */
+    public function upMaterial()
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token='.$this->getWXAccessToken().'&type=image';
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('POST',$url,[
+            'multipart' => [
+                [
+                    'name'     => 'username',
+                    'contents' => 'zhangsan'
+                ],
+                [
+                    'name'     => 'media',
+                    'contents' => fopen('abc.jpg', 'r')
+                ],
+            ]
+        ]);
+
+        $body = $response->getBody();
+        echo $body;echo '<hr>';
+        $d = json_decode($body,true);
+        echo '<pre>';print_r($d);echo '</pre>';
+
+
+    }
+    public function upMaterialTest($file_path)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token='.$this->getWXAccessToken().'&type=image';
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('POST',$url,[
+            'multipart' => [
+                [
+                    'name'     => 'media',
+                    'contents' => fopen($file_path, 'r')
+                ],
+            ]
+        ]);
+
+        $body = $response->getBody();
+        echo $body;echo '<hr>';
+        $d = json_decode($body,true);
+        echo '<pre>';print_r($d);echo '</pre>';
+
+
+    }
+    /**
+     * 获取永久素材列表
+     */
+    public function materialList()
+    {
+        $client = new GuzzleHttp\Client();
+        $type = $_GET['type'];
+        $offset = $_GET['offset'];
+
+        $url = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token='.$this->getWXAccessToken();
+
+        $body = [
+            "type"      => $type,
+            "offset"    => $offset,
+            "count"     => 20
+        ];
+        $response = $client->request('POST', $url, [
+            'body' => json_encode($body)
+        ]);
+
+        $body = $response->getBody();
+        echo $body;echo '<hr>';
+        $arr = json_decode($response->getBody(),true);
+        echo '<pre>';print_r($arr);echo '</pre>';
+
+
+    }
+
+    /**
+     * 表单测试
+     */
+    public function formTest(){
+        return view('weixin.weixin');
+
+
+
+
+
+    }
+    public function formShow(Request $request){
+//        echo '<pre>';print_r($_POST);echo '</pre>';echo '<hr>';
+//        echo '<pre>';print_r($_FILES);echo '</pre>';echo '<hr>';
+        //保存文件
+        $img_file=$request->file('media');
+        //echo '<pre>';print_r($img_file);echo '</pre>';echo '<hr>';
+        //原文件名
+        $img_origin_name = $img_file->getClientOriginalName();
+        echo 'originName: '.$img_origin_name;echo '</br>';
+        //获取文件扩展名
+        $file_ext = $img_file->getClientOriginalExtension();
+        echo 'ext: '.$file_ext;echo '</br>';
+
+        //重命名
+        $new_file_name=str_random(10).'.'.$file_ext;
+        echo 'ext: '.$new_file_name;echo '</br>';
+        //保存文件
+        $save_file_path=$request->media->storeAs('form_test',$new_file_name);//服务器保存路径
+        echo 'save_file_path:'.$save_file_path;echo '<hr>';
+        //上传至微信永久素材
+        $this->upMaterialTest($save_file_path);
     }
 }
