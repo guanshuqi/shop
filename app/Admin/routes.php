@@ -19,7 +19,7 @@ Route::group([
     $router->resource('/material',WeixinMaterialController::class);//永久素材
     $router->get('/sendmsg','WeixinMediaController@sendMsg');//群发消息
     $router->post('/','WeixinMediaController@all');
-    $router->post('/material','WeixinMediaController@formShow');
+    $router->post('/material','WeixinMaterialController@formShow');
 
 
 });
