@@ -459,6 +459,7 @@ class IndexController extends Controller
      */
     public function formTest(){
         return view('weixin.weixin');
+        
     }
     public function formShow(Request $request){
 //        echo '<pre>';print_r($_POST);echo '</pre>';echo '<hr>';
