@@ -146,4 +146,23 @@ class WeixinMediaController extends Controller
 
         return $form;
     }
+
+
+    /**
+     * 群发消息
+     */
+    public function sendmsg(Content $content)
+    {
+        return $content
+            ->header('群发消息')
+            ->description('description')
+            ->body($this->send_msg());
+    }
+    public function send_msg(){
+        $form = new Form(new WeixinMaterial);
+
+
+
+        return $form;
+    }
 }
