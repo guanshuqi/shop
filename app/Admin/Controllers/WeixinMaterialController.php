@@ -88,7 +88,7 @@ class WeixinMaterialController extends Controller
         $grid->id('ID');
         $grid->media_id('MEDIA ID');
         $grid->url('URL')->display(function($file_name){
-            return '<img src="'.$file_name.'">';
+            return '<img src="'.$file_name.'" width="100px" height="100px">';
         });
 
 
