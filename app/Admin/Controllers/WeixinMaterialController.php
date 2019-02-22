@@ -117,7 +117,7 @@ class WeixinMaterialController extends Controller
     protected function form()
     {
         $form = new Form(new WeixinMaterial);
-        $form->file('media_id','图片');
+        $form->file('media','图片');
 
 
         return $form;
