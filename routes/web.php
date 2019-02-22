@@ -117,7 +117,7 @@ Route::get('/createMenu','Weixin\IndexController@createMenu');
 Route::get('/addMaterial','Weixin\IndexController@addMaterial');
 Route::get('/formTest','Weixin\IndexController@formTest');//表单测试
 Route::post('/formShow','Weixin\IndexController@formShow');//表单测试
-Route::get('/weixin/materialList','Weixin\WeixinController@materialList');     //获取永久素材列表
-Route::get('/weixin/materialUpload','Weixin\WeixinController@upMaterial');     //上传永久素材
+Route::get('/weixin/materialList','Weixin\IndexController@materialList');     //获取永久素材列表
+Route::get('/weixin/materialUpload','Weixin\IndexController@upMaterial');     //上传永久素材
 
 
