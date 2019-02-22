@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 class WeixinMediaController extends Controller
 {
+    protected $redis_weixin_access_token = 'str:weixin_access_token';
     use HasResourceActions;
 
     /**
