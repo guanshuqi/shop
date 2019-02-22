@@ -9,6 +9,9 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use GuzzleHttp;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Request;
 
 class WeixinMaterialController extends Controller
 {
@@ -67,7 +70,7 @@ class WeixinMaterialController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Create')
+            ->header('上传文件')
             ->description('description')
             ->body($this->form());
     }
@@ -81,6 +84,11 @@ class WeixinMaterialController extends Controller
     {
         $grid = new Grid(new WeixinMaterial);
 
+        $grid->id('ID');
+        $grid->media_id('MEDIA ID');
+        $grid->url('URL')->display(function($file_name){
+            return '<img src="'.$file_name.'">';
+        });
 
 
         return $grid;
@@ -109,9 +117,59 @@ class WeixinMaterialController extends Controller
     protected function form()
     {
         $form = new Form(new WeixinMaterial);
-
+        $form->file('media_id','图片');
 
 
         return $form;
     }
+
+    /**
+     * 上传永久素材
+     * @param $file_path
+     */
+    public function upMaterialTest($file_path)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token='.$this->getWXAccessToken().'&type=image';
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('POST',$url,[
+            'multipart' => [
+                [
+                    'name'     => 'media',
+                    'contents' => fopen($file_path, 'r')
+                ],
+            ]
+        ]);
+
+        $body = $response->getBody();
+        echo $body;echo '<hr>';
+        $d = json_decode($body,true);
+        //入库
+        WeixinMaterial::insertGetId($d);
+        echo '<pre>';print_r($d);echo '</pre>';
+
+
+    }
+    public function formShow(Request $request){
+//        echo '<pre>';print_r($_POST);echo '</pre>';echo '<hr>';
+//        echo '<pre>';print_r($_FILES);echo '</pre>';echo '<hr>';
+        //保存文件
+        $img_file=$request->file('media');
+        //echo '<pre>';print_r($img_file);echo '</pre>';echo '<hr>';
+        //原文件名
+        $img_origin_name = $img_file->getClientOriginalName();
+        echo 'originName: '.$img_origin_name;echo '</br>';
+        //获取文件扩展名
+        $file_ext = $img_file->getClientOriginalExtension();
+        echo 'ext: '.$file_ext;echo '</br>';
+
+        //重命名
+        $new_file_name=str_random(10).'.'.$file_ext;
+        echo 'ext: '.$new_file_name;echo '</br>';
+        //保存文件
+        $save_file_path=$request->media->storeAs('form_test',$new_file_name);//服务器保存路径
+        echo 'save_file_path:'.$save_file_path;echo '<hr>';
+        //上传至微信永久素材
+        $this->upMaterialTest($save_file_path);
+    }
+
 }

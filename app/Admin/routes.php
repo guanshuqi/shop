@@ -16,7 +16,10 @@ Route::group([
     $router->resource('/users',UsersController::class);
     $router->resource('/wxuser',WeixinController::class);
     $router->resource('/wxMedia',WeixinMediaController::class);
-    $router->get('/sendmsg','WeixinMediaController@sendMsg');
+    $router->resource('/material',WeixinMaterialController::class);//永久素材
+    $router->get('/sendmsg','WeixinMediaController@sendMsg');//群发消息
     $router->post('/','WeixinMediaController@all');
+    $router->post('/material','WeixinMediaController@formShow');
+
 
 });
