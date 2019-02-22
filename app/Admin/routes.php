@@ -16,5 +16,6 @@ Route::group([
     $router->resource('/users',UsersController::class);
     $router->resource('/wxuser',WeixinController::class);
     $router->get('/sendmsg','WeixinMediaController@sendMsg');
+    $router->post('/','WeixinMediaController@all');
 
 });
