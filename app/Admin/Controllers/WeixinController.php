@@ -83,7 +83,9 @@ class WeixinController extends Controller
 
         $grid->id('Id');
         $grid->uid('Uid');
-        $grid->openid('Openid');
+        $grid->openid('Openid')->display(function($file){
+            return '<a href="touser?openid='.$file.'">'.$file.'</a>';
+        });
         $grid->add_time('Add time');
         $grid->nickname('Nickname');
         $grid->sex('Sex');
@@ -133,6 +135,14 @@ class WeixinController extends Controller
         $form->switch('sex', 'Sex');
         $form->text('headimgurl', 'Headimgurl');
         $form->number('subscribe_time', 'Subscribe time');
+
+        return $form;
+    }
+    protected function openid()
+    {
+        $form = new Form(new WeixinUser);
+
+        $form->text('content','发送：');
 
         return $form;
     }

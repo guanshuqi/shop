@@ -18,8 +18,10 @@ Route::group([
     $router->resource('/wxMedia',WeixinMediaController::class);
     $router->resource('/material',WeixinMaterialController::class);//永久素材
     $router->get('/sendmsg','WeixinMediaController@sendMsg');//群发消息
-    $router->post('/','WeixinMediaController@all');
+    $router->post('/','WeixinMediaController@all');//群发消息
     $router->post('/material','WeixinMaterialController@formShow');
+    $router->get('/touser','WeixinController@openid');
+
 
 
 });
