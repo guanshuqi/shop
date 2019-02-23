@@ -119,5 +119,7 @@ Route::get('/formTest','Weixin\IndexController@formTest');//表单测试
 Route::post('/formShow','Weixin\IndexController@formShow');//表单测试
 Route::get('/weixin/materialList','Weixin\IndexController@materialList');     //获取永久素材列表
 Route::get('/weixin/materialUpload','Weixin\IndexController@upMaterial');     //上传永久素材
+Route::get('/talk','Weixin\IndexController@talk');//微信对话
+Route::post('/weixin/talk','Weixin\IndexController@weixintalk');//微信对话
 
 

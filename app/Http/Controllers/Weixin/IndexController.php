@@ -445,4 +445,21 @@ class IndexController extends Controller
         //上传至微信永久素材
         $this->upMaterialTest($save_file_path);
     }
+
+    public function talk(){
+        $user=WeixinUser::all()->toArray();
+        print_r($user);
+//        $data=[
+//            'openid'=>$user['nickname']
+//        ];
+//        print_r($data);die;
+
+        return view('weixin.index');
+    }
+    public function weixintalk(Request $request){
+
+        $text=$request->input('aaa');
+        echo $text;
+
+    }
 }
