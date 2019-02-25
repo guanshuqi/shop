@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Model\WeixinUser;
+use App\Model\WeixinTalk;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -200,7 +201,7 @@ class WeixinController extends Controller
         return $data;
     }
     /**
-     * 接收处理消息 dochat
+     * 私聊 dochat
      */
     public function dochat(Request $request){
         $msg=$request->input('content');
@@ -212,15 +213,41 @@ class WeixinController extends Controller
         //请求微信接口
         $client = new GuzzleHttp\Client(['base_uri' => $url]);
         $data=[
-            'touser'=>$openid,
-            "msgtype"=>"text",
+            'openid'=>$openid,
+            "msg_type"=>"text",
             "text"=>["content"=>$msg],
         ];
         $res=$client->request('POST', $url, ['body' => json_encode($data,JSON_UNESCAPED_UNICODE)]);
         $res_arr=json_decode($res->getBody(),true);
         if($res_arr){
-            echo '对话成功';
+
         }
+    }
+
+    /**
+     * 记录消息
+     */
+    public function getChatMsg()
+    {
+        $openid = $_GET['openid'];  //用户openid
+        $pos = $_GET['pos'];        //上次聊天位置
+        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->first();
+        //$msg = WeixinChatModel::where(['openid'=>$openid])->where('id','>',$pos)->get();
+        if($msg){
+            $response = [
+                'errno' => 0,
+                'data'  => $msg->toArray()
+            ];
+
+        }else{
+            $response = [
+                'errno' => 50001,
+                'msg'   => '服务器异常，请联系管理员'
+            ];
+        }
+
+        die( json_encode($response));
+
     }
 
 }

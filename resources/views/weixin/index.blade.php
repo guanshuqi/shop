@@ -1,17 +1,17 @@
-@extends('layouts.bst')
 
-@section('content')
-<form action="" method="post" enctype="multipart/form-data">
-    {{csrf_field()}}
-    <div>
-        <h2>{{$openid}}</h2>
-        <ul>
-            <li>
+<div class="container">
 
-            </li>
-        </ul>
+
+    <div class="chat" id="chat_div">
+
     </div>
-    <input type="text" name="aaa">
-    <input type="submit" value="发送">
-</form>
-@endsection
+    <hr>
+
+    <form action="" class="form-inline">
+
+        <input type="hidden" value="1" id="msg_pos">
+        <textarea name="" id="send_msg" cols="30" rows="3"></textarea>
+        <button class="btn btn-info" id="send_msg_btn">Send</button>
+    </form>
+</div>
+<script src="{{URL::asset('/js/weixin/wxtalk.js')}}"></script>
