@@ -230,7 +230,7 @@ class WeixinController extends Controller
     {
         $openid = $_GET['openid'];  //用户openid
         $pos = $_GET['pos'];        //上次聊天位置
-        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->first();
+        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->get();
         if($msg){
             $response = [
                 'errno' => 0,
