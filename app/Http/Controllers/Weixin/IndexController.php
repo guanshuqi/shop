@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Weixin;
 use App\Model\WeixinUser;
 use App\Model\WeixinMedia;
+use App\Model\WeixinTalk;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
