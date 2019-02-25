@@ -53,6 +53,7 @@
         },
         url     :   '/touser',
         type    :   'post',
+        data    :   {msg:send_msg,openid:openid},
         dataType:   'json',
         success :   function(d){
 //            if(d.errno==0){     //服务器响应正常
