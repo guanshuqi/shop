@@ -16,7 +16,7 @@
 <script>
     var openid = $("#openid").val();
 
-    /*setInterval(function(){
+    setInterval(function(){
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -36,7 +36,7 @@
                 }
             }
         });
-    },5000);*/
+    },5000);
 
     // 客服发送消息 begin
     $("#send_msg_btn").click(function(e){
