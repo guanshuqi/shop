@@ -60,7 +60,7 @@ class IndexController extends Controller
                 //写入数据库
                 $data = [
                     'openid'    => $openid,
-                    'msg_type'  => 'text',
+                    'msg_type'  => 1,
                     'msg_content'    => $xml->Content,
                     'send_time'   => time()
                 ];

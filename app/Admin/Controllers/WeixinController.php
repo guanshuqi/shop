@@ -209,6 +209,16 @@ class WeixinController extends Controller
         ];
         $res=$client->request('POST', $url, ['body' => json_encode($data,JSON_UNESCAPED_UNICODE)]);
         $res_arr=json_decode($res->getBody(),true);
+        //写入数据库
+        $info = [
+            'openid'    => $openid,
+            'msg_type'  => 2,
+            'msg_content'    => $msg,
+            'send_time'   => time()
+        ];
+
+        $m_id = WeixinTalk::insertGetId($info);
+        var_dump($m_id);
         if ($res_arr['errcode'] == 0) {
             return "发送成功";
         } else {
