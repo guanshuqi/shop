@@ -21,7 +21,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url     :   '/touser/chat?openid=' + openid + '&pos=' + $("#msg_pos").val(),
+            url     :   '/admin/touser/chat?openid=' + openid + '&pos=' + $("#msg_pos").val(),
             type    :   'get',
             dataType:   'json',
             success :   function(d){
