@@ -12,11 +12,15 @@ class IndexController extends Controller
 {
     //
     protected $redis_weixin_access_token = 'str:weixin_access_token';     //微信 access_token
+    /**
+     * 刷新access_token
+     */
     public function test()
     {
-        //echo __METHOD__;
-        echo 'token:'.$this->getWXAccessToken();
+        Redis::del($this->redis_weixin_access_token);
+        echo $this->getWXAccessToken();
     }
+
     /**
      * 首次接入
      */
