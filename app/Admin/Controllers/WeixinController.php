@@ -144,7 +144,7 @@ class WeixinController extends Controller
         return $form;
     }
     /**
-     * 客服私聊
+     * 客服私聊视图
      */
     public function openid(Content $content)
     {
@@ -154,19 +154,9 @@ class WeixinController extends Controller
             ->header($data['nickname'])
             ->description("聊天")
             ->row("<img src='".$data['headimgurl']."' width='70px'>")
-            ->body($this->chatview($data));
+            ->body(view('/weixin/index',['openid'=>$data['openid']]));
     }
-    /**
-     * 客服私聊视图
-     */
 
-    public function chatview($data){
-        $list=[
-            'data'=>$data
-        ];
-        return view('weixin.index',$list);
-        //return $form;
-    }
 
 
     /**
@@ -205,6 +195,7 @@ class WeixinController extends Controller
     public function dochat(Request $request){
         $msg=$request->input('content');
         $openid=$request->input('openid');
+       // echo $openid;die;
         //获取access_token
         $access_token=$this->getWXAccessToken();
         //拼接url
@@ -212,13 +203,18 @@ class WeixinController extends Controller
         //请求微信接口
         $client = new GuzzleHttp\Client(['base_uri' => $url]);
         $data=[
-            'openid'=>$openid,
-            "msg_type"=>"text",
+            'touser'=>$openid,
+            "msgtype"=>"text",
             "text"=>["content"=>$msg],
         ];
         $res=$client->request('POST', $url, ['body' => json_encode($data,JSON_UNESCAPED_UNICODE)]);
         $res_arr=json_decode($res->getBody(),true);
-        if($res_arr){
+        if ($res_arr['errcode'] == 0) {
+            return "发送成功";
+        } else {
+            echo "发送失败";
+            echo '</br>';
+            echo $res_arr['errmsg'];
 
         }
     }
@@ -230,7 +226,7 @@ class WeixinController extends Controller
     {
         $openid = $_GET['openid'];  //用户openid
         $pos = $_GET['pos'];        //上次聊天位置
-        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->get();
+        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->first();
         if($msg){
             $response = [
                 'errno' => 0,
