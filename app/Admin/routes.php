@@ -22,7 +22,7 @@ Route::group([
     $router->post('/material','WeixinMaterialController@formShow');
     $router->get('/touser','WeixinController@openid');//私聊
     $router->post('/','WeixinController@dochat');//私聊
-    $router->post('/touser','WeixinController@getChatMsg');//私聊
+    $router->get('/touser','WeixinController@getChatMsg');//私聊
 
 
 
