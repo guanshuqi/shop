@@ -218,7 +218,6 @@ class WeixinController extends Controller
         ];
 
         $m_id = WeixinTalk::insertGetId($info);
-        var_dump($m_id);
         if ($res_arr['errcode'] == 0) {
             return "发送成功";
         } else {
@@ -236,7 +235,7 @@ class WeixinController extends Controller
     {
         $openid = $_GET['openid'];  //用户openid
         $pos = $_GET['pos'];        //上次聊天位置
-        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->first();
+        $msg = WeixinTalk::where(['openid'=>$openid,'msg_type'=>1])->where('id','>',$pos)->OrderBy('send_time','des')->first();
         if($msg){
             $response = [
                 'errno' => 0,

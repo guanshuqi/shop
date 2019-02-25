@@ -56,15 +56,6 @@
             //dataType:   'json',
             success :   function(d){
                 console.log(d);
-            /*if(d.errno==0){     //服务器响应正常
-                //数据填充
-                var msg_str = '<h5>'+d.data.openid+':'+ d.data.msg_content+'</h5>';
-
-                $("#chat_div").append(msg_str);
-                $("#msg_pos").val(d.data.id)
-            }else{
-
-            }*/
             }
         });
     });
