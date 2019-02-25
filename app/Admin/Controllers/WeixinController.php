@@ -149,7 +149,7 @@ class WeixinController extends Controller
     public function openid(Content $content)
     {
         $openid=$_GET['openid'];
-        $data=WeixinUser::where('openid',$openid)->first();
+        $data=WeixinUser::where(['openid'=>$openid])->first();
         return $content
             ->header($data['nickname'])
             ->description("聊天")
@@ -161,11 +161,10 @@ class WeixinController extends Controller
      */
 
     public function chatview($data){
-        $form = new Form(new WeixinUser);
-        $form->text('content','聊天内容');
-        // $form->textarea('','聊天内容')->value($this->returnmsg($data['openid']));
-        $form->hidden('openid')->value($data['openid']);
-        return view('weixin.index');
+        $list=[
+            'data'=>$data
+        ];
+        return view('weixin.index',$list);
         //return $form;
     }
 
@@ -231,8 +230,7 @@ class WeixinController extends Controller
     {
         $openid = $_GET['openid'];  //用户openid
         $pos = $_GET['pos'];        //上次聊天位置
-        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->first();
-        //$msg = WeixinChatModel::where(['openid'=>$openid])->where('id','>',$pos)->get();
+        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->OrderBy('send_time','des')->first();
         if($msg){
             $response = [
                 'errno' => 0,

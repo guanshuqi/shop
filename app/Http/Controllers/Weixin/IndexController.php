@@ -457,6 +457,26 @@ class IndexController extends Controller
         //上传至微信永久素材
         $this->upMaterialTest($save_file_path);
     }
+    public function getChatMsg()
+    {
+        $openid = $_GET['openid'];  //用户openid
+        $pos = $_GET['pos'];        //上次聊天位置
+        $msg = WeixinTalk::where(['openid'=>$openid])->where('id','>',$pos)->first();
+        if($msg){
+            $response = [
+                'errno' => 0,
+                'data'  => $msg->toArray()
+            ];
 
+        }else{
+            $response = [
+                'errno' => 50001,
+                'msg'   => '服务器异常，请联系管理员'
+            ];
+        }
+
+        die( json_encode($response));
+
+    }
 
 }

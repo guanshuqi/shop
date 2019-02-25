@@ -21,8 +21,8 @@ Route::group([
     $router->post('/','WeixinMediaController@all');//群发消息
     $router->post('/material','WeixinMaterialController@formShow');
     $router->get('/touser','WeixinController@openid');//私聊
-    $router->post('/','WeixinController@dochat');//私聊
-    $router->get('/touser','WeixinController@getChatMsg');//私聊
+    $router->post('/touser','WeixinController@dochat');//私聊
+    $router->get('/touser/chat','WeixinController@getChatMsg');//私聊
 
 
 
