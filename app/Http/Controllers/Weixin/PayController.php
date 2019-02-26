@@ -9,14 +9,17 @@ use App\Model\OrderModel;
 
 class PayController extends Controller
 {
+    //
+
     public $weixin_unifiedorder_url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     public $weixin_notify_url = 'http://shop.comcto.com/weixin/pay/notice';     //支付通知回调
+
     public function test()
     {
 
 
         //
-        $total_fee = 0.01;         //用户要支付的总金额
+        $total_fee = 1;         //用户要支付的总金额
         $order_id = OrderModel::generateOrderSN();
 
         $order_info = [
@@ -58,6 +61,8 @@ class PayController extends Controller
         //将 code_url 返回给前端，前端生成 支付二维码
 
     }
+
+
     protected function ToXml()
     {
         if(!is_array($this->values)
@@ -152,14 +157,19 @@ class PayController extends Controller
         $buff = trim($buff, "&");
         return $buff;
     }
+
+
     /**
      * 微信支付回调
      */
-    public function notice(){
+    public function notice()
+    {
         $data = file_get_contents("php://input");
+
         //记录日志
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
+
         $xml = simplexml_load_string($data);
 
         if($xml->result_code=='SUCCESS' && $xml->return_code=='SUCCESS'){      //微信支付成功回调
@@ -179,6 +189,8 @@ class PayController extends Controller
 
         $response = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
         echo $response;
+
     }
+
 
 }
