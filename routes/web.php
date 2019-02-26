@@ -120,6 +120,6 @@ Route::post('/formShow','Weixin\IndexController@formShow');//表单测试
 Route::get('/weixin/materialList','Weixin\IndexController@materialList');     //获取永久素材列表
 Route::get('/weixin/materialUpload','Weixin\IndexController@upMaterial');     //上传永久素材
 
-Route::get('/weixin/pay/notice','Weixin\PayController@notice');//微信支付回调
+Route::post('/weixin/pay/notice','Weixin\PayController@notice');//微信支付回调
 Route::get('/weixin/pay/test','Weixin\PayController@test');     //微信支付测试
 
