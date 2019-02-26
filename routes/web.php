@@ -46,13 +46,16 @@ Route::get('/date','Test\TestController@date');
 Route::get('/userList','User\UserController@userList');
 Route::get('/dump','User\UserController@dump');
 
-//注册
-Route::any('/register','Login\LoginController@registerAdd');
-//登录
-Route::any('/login','Login\LoginController@login');
-Route::any('/bootstorp','Test\TestController@bootstorp');
-Route::any('/login/center','Login\LoginController@center');
-Route::any('/quit','Login\LoginController@quit');
+/** 注册*/
+Route::get('/userreg','User\UserController@reg');
+Route::post('/userreg','User\UserController@doReg');
+/** 登录*/
+Route::get('/userlogin','User\UserController@login');
+Route::post('/userlogin','User\UserController@doLogin');
+Route::get('/usercenter','User\UserController@center')->middleware('check.login');//
+/** 退出*/
+Route::get('/userquit','User\UserController@quit');
+
 //中间件
 Route::middleware(['log.click'])->group(function(){
     Route::any('/test/guzzle','Test\TestController@guzzleTest');

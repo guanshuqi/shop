@@ -97,7 +97,7 @@ class LoginController extends Controller{
             die('非法请求');
         }
         if(empty($_COOKIE['uid'])){
-            header('Refresh:2;url=/login');
+            header('Refresh:2;url=/userlogin');
             echo '请先登录';
             exit;
         }else{

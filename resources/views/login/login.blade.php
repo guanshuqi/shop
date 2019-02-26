@@ -1,7 +1,7 @@
 @extends('login.parent')
 
 @section('content')
-    <form action="/login" method="post">
+    <form action="/userlogin" method="post">
         <h2>登录</h2>
         {{csrf_field()}}
         <table  class="table table-bordered">
