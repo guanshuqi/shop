@@ -124,5 +124,7 @@ Route::get('/weixin/materialList','Weixin\IndexController@materialList');     //
 Route::get('/weixin/materialUpload','Weixin\IndexController@upMaterial');     //上传永久素材
 
 Route::post('/weixin/pay/notice','Weixin\PayController@notice');//微信支付回调
-Route::get('/weixin/pay/test','Weixin\PayController@test');     //微信支付测试
+Route::get('/weixin/pay/test/{order_sn}','Weixin\PayController@test');     //微信支付测试
+Route::get('/weixin/pay/{code_url}','Weixin\PayController@pay');     //微信支付测试
+
 

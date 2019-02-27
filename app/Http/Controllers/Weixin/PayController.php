@@ -6,21 +6,23 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Weixin\WXBizDataCryptController;
 use App\Model\OrderModel;
+use App\Model\WeixinCode;
 
 class PayController extends Controller
 {
     //
 
     public $weixin_unifiedorder_url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    public $weixin_notify_url = 'https://gsqq.52self.cn/weixin/pay/notice';     //支付通知回调
+    public $weixin_notify_url = 'http://gsqq.52self.cn/weixin/pay/notice';     //支付通知回调
 
-    public function test()
+    public function test($order_sn)
     {
 
 
         //
         $total_fee = 1;         //用户要支付的总金额
-        $order_id = OrderModel::generateOrderSN();
+        $order_id = base64_decode($order_sn);//订单号
+        setcookie('order_id',$order_id,time()+3600,'/','',false,true);
 
         $order_info = [
             'appid'         =>  env('WEIXIN_APPID_0'),      //微信支付绑定的服务号的APPID
@@ -35,7 +37,8 @@ class PayController extends Controller
             'trade_type'    => 'NATIVE'                         // 交易类型
         ];
 
-
+        $id=WeixinCode::insertGetId($order_info);
+        var_dump($id);
         $this->values = [];
         $this->values = $order_info;
         $this->SetSign();
@@ -44,15 +47,20 @@ class PayController extends Controller
         $rs = $this->postXmlCurl($xml, $this->weixin_unifiedorder_url, $useCert = false, $second = 30);
 
         $data =  simplexml_load_string($rs);
+
         //echo 'code_url: '.$data->code_url;echo '<br>';
         //将 code_url 返回给前端，前端生成 支付二维码
-        include 'phpqrcode/phpqrcode.php';
         $url=$data->code_url;
-        $file_name=false;
-        \QRcode::png($url,$file_name,'H','5','1');die;
+        $url=base64_encode($url);
+
+        header('refresh:0;url=/weixin/pay/'.$url.'');
 
 
-
+    }
+    public function pay($code_url){
+        $code_url=base64_decode($code_url);
+        $order_id=$_COOKIE['order_id'];
+        return view('weixin.erwei',['code_url'=>$code_url,'order_id'=>$order_id]);
     }
 
 
