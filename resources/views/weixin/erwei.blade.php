@@ -26,7 +26,7 @@
                         "/weixin/ifsuccess",
                         {order_id:order_id},
                         function(msg){
-                            if(msg==1){
+                            if(msg==2){
                                 location.href='/weixin/paysuccess'
                             }
                         }
