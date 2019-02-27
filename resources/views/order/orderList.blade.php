@@ -19,7 +19,7 @@
                 <td>{{$v['add_amount']}}</td>
                 <td>{{date('Y-m-d H:i:s',$v['add_time'])}}</td>
                 <td>
-                    <?php if($v['is_pay']==0){?>
+                    <?php if($v['is_pay']==1){?>
                         <a href="/orderPay/{{base64_encode($v['order_sn'])}}" class="btn btn-info"> 支付宝支付 </a>
                         <a href="/weixin/pay/test/{{base64_encode($v['order_sn'])}}" class="btn btn-info"> 微信支付 </a>
                     <?php }else{ ?>
