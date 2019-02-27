@@ -20,6 +20,21 @@
                 height:200, //高度
                 text:code_url //任意内容
             });
+            $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+            var ifsuccess=function(){
+                $.post(
+                        "/weixin/ifsuccess",
+                        {order_id:order_id},
+                        function(msg){
+                            if(msg==1){
+                                location.href='/weixin/paysuccess'
+                            }
+                        }
+                )
+            }
+            var s= setInterval(function(){
+                ifsuccess();
+            }, 1000*3)
 
 
         })

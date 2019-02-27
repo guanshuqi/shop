@@ -134,6 +134,21 @@ class PayController extends Controller
         return $result;
     }
 
+
+    public function ifsuccess(Request $request){
+        $order_id=$request->input('order_id');
+        $order_info=OrderModel::where(['order_sn'=>$order_id])->first();
+        if($order_info['is_pay']==1){
+            echo 1;
+        }else{
+            echo 2;
+        }
+
+    }
+
+    public function paysuccess(){
+        return view('weixin.paysuccess');
+    }
     /**
      * 格式化参数格式化成url参数
      */
@@ -166,9 +181,10 @@ class PayController extends Controller
 
         if($xml->result_code=='SUCCESS' && $xml->return_code=='SUCCESS'){      //微信支付成功回调
             //验证签名
-            $sign = true;
-
-            if($sign){       //签名验证成功
+            $this->values=[];
+            $this->values=$xml;
+            $sign=$this->SetSign();
+            if($xml['sign']==$sign){       //签名验证成功
                 //TODO 逻辑处理  订单状态更新
                 $order_sn=$xml->out_trade_no;
                 $order_info=[
