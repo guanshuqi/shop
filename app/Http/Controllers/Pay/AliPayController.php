@@ -46,7 +46,7 @@ class AliPayController extends Controller
     public function pay($order_id)
     {
         //验证订单状态
-        $orderInfo=OrderModel::where(['order_id'=>$order_id])->first()->toArray();
+        $orderInfo=OrderModel::where(['order_id'=>$order_id])->first();
         //是否已支付
         if($orderInfo['is_pay']==1){
             die('订单已支付，请勿重复支付');
