@@ -175,23 +175,23 @@ class PayController extends Controller
 
         //记录日志
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
-        file_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
+        fi转成数组le_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
+        //
+        $xml = (array)simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-        $xml = simplexml_load_string($data);
-
-        if($xml->result_code=='SUCCESS' && $xml->return_code=='SUCCESS'){      //微信支付成功回调
+        if($xml['result_code']=='SUCCESS' && $xml['return_code']=='SUCCESS'){      //微信支付成功回调
             //验证签名
             $this->values=[];
             $this->values=$xml;
             $sign=$this->SetSign();
             if($xml['sign']==$sign){       //签名验证成功
                 //TODO 逻辑处理  订单状态更新
-                $order_sn=$xml->out_trade_no;
+                $order_sn=$xml['out_trade_no'];
                 $order_info=[
-                    'pay_amount'=>$sign,
+                    'pay_amount'=>$xml['total_fee'],
                     'pay_time'=>time(),
                     'is_pay'=>2,
-                    'plat_oid'=>$xml->transaction_id,
+                    'plat_oid'=>$xml['transaction_id'],
                     'plat'=>2
                 ];
             OrderModel::where(['order_sn'=>$order_sn])->update($order_info);
