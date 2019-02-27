@@ -47,7 +47,7 @@ class PayController extends Controller
         $url=$data->code_url;
         $url=base64_encode($url);
 
-//        header('refresh:0;url=/weixin/pay/'.$url.'');
+        header('refresh:0;url=/weixin/pay/'.$url.'');
 
     }
     public function pay($code_url){
