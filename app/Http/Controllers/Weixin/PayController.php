@@ -175,8 +175,8 @@ class PayController extends Controller
 
         //记录日志
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
-        fi转成数组le_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
-        //
+        file_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
+        //转成数组
         $xml = (array)simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         if($xml['result_code']=='SUCCESS' && $xml['return_code']=='SUCCESS'){      //微信支付成功回调
