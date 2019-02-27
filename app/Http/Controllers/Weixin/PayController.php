@@ -188,7 +188,6 @@ class PayController extends Controller
                     'plat'=>2
                 ];
             OrderModel::where(['order_sn'=>$order_sn])->update($order_info);
-                echo '验签成功';
             }else{
                 //TODO 验签失败
                 echo '验签失败，IP: '.$_SERVER['REMOTE_ADDR'];
