@@ -18,43 +18,36 @@ class PayController extends Controller
     public function test($order_sn)
     {
 
-
         //
         $total_fee = 1;         //用户要支付的总金额
-        $order_id = base64_decode($order_sn);//订单号
+        $order_id =$order_sn;//订单号
         setcookie('order_id',$order_id,time()+3600,'/','',false,true);
-
         $order_info = [
             'appid'         =>  env('WEIXIN_APPID_0'),      //微信支付绑定的服务号的APPID
             'mch_id'        =>  env('WEIXIN_MCH_ID'),       // 商户ID
             'nonce_str'     => str_random(16),             // 随机字符串
             'sign_type'     => 'MD5',
-            'body'          => '测试订单-'.mt_rand(1111,9999) . str_random(6),
+            'body'          => '测试订单'.$order_id,
             'out_trade_no'  => $order_id,                       //本地订单号
             'total_fee'     => $total_fee,
             'spbill_create_ip'  => $_SERVER['REMOTE_ADDR'],     //客户端IP
             'notify_url'    => $this->weixin_notify_url,        //通知回调地址
             'trade_type'    => 'NATIVE'                         // 交易类型
         ];
-
-        $id=WeixinCode::insertGetId($order_info);
-        var_dump($id);
         $this->values = [];
         $this->values = $order_info;
         $this->SetSign();
 
         $xml = $this->ToXml();      //将数组转换为XML
         $rs = $this->postXmlCurl($xml, $this->weixin_unifiedorder_url, $useCert = false, $second = 30);
-
         $data =  simplexml_load_string($rs);
 
-        //echo 'code_url: '.$data->code_url;echo '<br>';
+        //echo 'code_url: '.$data->code_url;echo '<br>';die;
         //将 code_url 返回给前端，前端生成 支付二维码
         $url=$data->code_url;
         $url=base64_encode($url);
 
-        header('refresh:0;url=/weixin/pay/'.$url.'');
-
+//        header('refresh:0;url=/weixin/pay/'.$url.'');
 
     }
     public function pay($code_url){
@@ -66,9 +59,7 @@ class PayController extends Controller
 
     protected function ToXml()
     {
-        if(!is_array($this->values)
-            || count($this->values) <= 0)
-        {
+        if(!is_array($this->values)||count($this->values)<= 0){
             die("数组数据异常！");
         }
         $xml = "<xml>";

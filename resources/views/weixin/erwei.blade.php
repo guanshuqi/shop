@@ -20,9 +20,7 @@
                 height:200, //高度
                 text:code_url //任意内容
             });
-            $.ajax(
-                    'url'=>
-            )
+
 
         })
     </script>
