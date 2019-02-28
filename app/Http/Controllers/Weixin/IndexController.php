@@ -528,10 +528,11 @@ class IndexController extends Controller
             ];
             $users=UsersModel::insertGetId($where);
             $data=[
-                'unionid'=>$unionid,
-                'uid'=>$users['id']
+                'uid'=>$users['id'],
+                'unionid'=>$unionid
+
             ];
-            WeixinUser::insertGetId($data);
+            WeixinUser::where($where)->insertGetId($data);
 
         }
     }
