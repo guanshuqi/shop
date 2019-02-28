@@ -528,6 +528,9 @@ class IndexController extends Controller
             ];
             $users=UsersModel::insertGetId($where);
             print_r($users);
+            $where=[
+                'nickname'=>$name
+            ];
             $data=[
                 'uid'=>$users['id'],
                 'unionid'=>$unionid
