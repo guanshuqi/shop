@@ -526,8 +526,8 @@ class IndexController extends Controller
             $where=[
                 'name'=>$name
             ];
-            $users=UsersModel::insert($where);
-            //print_r($users);
+            $users=UsersModel::insertGetId($where);
+            print_r($users);
             $where=[
                 'nickname'=>$name
             ];
@@ -536,7 +536,7 @@ class IndexController extends Controller
                 'unionid'=>$unionid
 
             ];
-            WeixinUser::where($where)->insert($data);
+            WeixinUser::where($where)->insertGetId($data);
 
         }
     }
