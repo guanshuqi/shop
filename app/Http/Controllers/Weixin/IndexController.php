@@ -526,7 +526,7 @@ class IndexController extends Controller
             $where=[
                 'name'=>$name
             ];
-            $users=UsersModel::insertGetId($where)->toArray();
+            $users=UsersModel::insertGetId($where);
             print_r($users);
             $where=[
                 'nickname'=>$name
