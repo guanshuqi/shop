@@ -536,7 +536,7 @@ class IndexController extends Controller
                 'unionid'=>$unionid
 
             ];
-            WeixinUser::where($where)->insertGetId($data);
+            WeixinUser::where($where)->insertAll($data);
 
         }
     }
