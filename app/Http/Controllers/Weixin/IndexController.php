@@ -516,7 +516,7 @@ class IndexController extends Controller
 
         $user_arr = json_decode($user_json,true);
 //        echo '<hr>';
-//        echo '<pre>';print_r($user_arr);echo '</pre>';
+        echo '<pre>';print_r($user_arr);echo '</pre>';
         $data=[
             'unionid'=>$user_arr['unionid']
         ];
