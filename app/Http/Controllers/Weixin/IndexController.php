@@ -517,14 +517,22 @@ class IndexController extends Controller
         $user_arr = json_decode($user_json,true);
 //        echo '<hr>';
         echo '<pre>';print_r($user_arr);echo '</pre>';
-        $data=[
-            'unionid'=>$user_arr['unionid']
-        ];
-        WeixinUser::where(['openid'=>$user_arr['openid']])->update($data);
-        if($user_arr['unionid']){
+        $unionid=$user_arr['unionid'];
+        $name=$user_arr['nickname'];
+        $data=WeixinUser::where(['unionid'=>$unionid])->first();
+        if($data){
             echo '登陆成功';
         }else{
-            UsersModel::insertGetId($user_arr);
+            $where=[
+                'name'=>$name
+            ];
+            $users=UsersModel::insertGetId($where);
+            $data=[
+                'unionid'=>$unionid,
+                'uid'=>$users['id']
+            ];
+            WeixinUser::insertGetId($data);
+
         }
     }
 }
