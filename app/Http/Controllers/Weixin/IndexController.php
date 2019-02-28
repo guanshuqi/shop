@@ -516,7 +516,7 @@ class IndexController extends Controller
 
         $user_arr = json_decode($user_json,true);
 //        echo '<hr>';
-        echo '<pre>';print_r($user_arr);echo '</pre>';
+        //echo '<pre>';print_r($user_arr);echo '</pre>';
         $unionid=$user_arr['unionid'];
         $name=$user_arr['nickname'];
         $data=WeixinUser::where(['unionid'=>$unionid])->first();
@@ -527,17 +527,22 @@ class IndexController extends Controller
                 'name'=>$name
             ];
             $users=UsersModel::insertGetId($where);
-            print_r($users);
-            $where=[
-                'nickname'=>$name
-            ];
             $data=[
                 'uid'=>$users,
+                'openid'=>$user_arr['openid'],
+                'add_time'=>time(),
+                'nickname'=>$name,
+                'sex'=>$user_arr['sex'],
+                'headimgurl'=>$user_arr['headimgurl'],
                 'unionid'=>$unionid
 
             ];
-            WeixinUser::where($where)->update($data);
-
+            $user=WeixinUser::insertGetId($data);
+            if($user){
+                echo '存入数据库成功';
+            }else{
+                echo '失败';
+            }
         }
     }
 }
