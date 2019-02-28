@@ -128,6 +128,8 @@ Route::get('/weixin/pay/test/{order_sn}','Weixin\PayController@test');     //微
 Route::get('/weixin/pay/{code_url}','Weixin\PayController@pay');     //微信支付测试
 Route::get('/weixin/paysuccess','Weixin\PayController@paysuccess');     //微信支付成功跳转
 Route::post('/weixin/ifsuccess','Weixin\PayController@ifsuccess');     //判断是否支付成功
-
+//微信登录
+Route::get('/weixin/login','Weixin\IndexController@login');
+Route::get('/weixin/getcode','Weixin\IndexController@getCode');
 
 

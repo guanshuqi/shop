@@ -483,4 +483,16 @@ class IndexController extends Controller
 
     }
 
+
+    /**
+     * 微信登录
+     */
+    public function login(){
+        //echo __METHOD__;DIE;
+        return view('weixin.login');
+    }
+    public function getCode(){
+        $code = $_GET['code'];          // code
+        echo $code;
+    }
 }
