@@ -527,22 +527,27 @@ class IndexController extends Controller
                 'name'=>$name
             ];
             $users=UsersModel::insertGetId($where);
-            $data=[
-                'uid'=>$users,
-                'openid'=>$user_arr['openid'],
-                'add_time'=>time(),
-                'nickname'=>$name,
-                'sex'=>$user_arr['sex'],
-                'headimgurl'=>$user_arr['headimgurl'],
-                'unionid'=>$unionid
-
-            ];
-            $user=WeixinUser::insertGetId($data);
-            if($user){
-                echo '存入数据库成功';
+            if($users){
+                $data=[
+                    'uid'=>$users,
+                    'openid'=>$user_arr['openid'],
+                    'add_time'=>time(),
+                    'nickname'=>$name,
+                    'sex'=>$user_arr['sex'],
+                    'headimgurl'=>$user_arr['headimgurl'],
+                    'unionid'=>$unionid,
+                    'subscribe_time'=>time(),
+                ];
+                $user=WeixinUser::insertGetId($data);
+                if($user){
+                    echo '存入数据库成功';
+                }else{
+                    echo '失败';
+                }
             }else{
-                echo '失败';
+                echo '入库失败';
             }
+
         }
     }
 }
