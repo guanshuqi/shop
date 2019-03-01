@@ -13,6 +13,7 @@ class IndexController extends Controller
 {
     //
     protected $redis_weixin_access_token = 'str:weixin_access_token';     //微信 access_token
+    protected $redis_weixin_jsapi_ticket = 'str:weixin_jsapi_ticket';     //微信 access_token
     /**
      * 刷新access_token
      */
@@ -558,9 +559,10 @@ class IndexController extends Controller
             'appid'=>env('ALIPAY_APPID'),
             'timestamp'=>time(),
             'noncestr' =>str_random(10),
-            'sign'     =>$this->jssdkSign()
 
         ];
+        $sign = $this->jssdkSign($jsconfig);
+        $jsconfig['sign'] = $sign;
         $data=[
             'jsconfig'=>$jsconfig
         ];
@@ -570,8 +572,30 @@ class IndexController extends Controller
     /**
      * 计算jssdk签名
      */
-    public function jssdkSign(){
-        $sign=str_random(15);
+    public function jssdkSign($param){
+        $jsapi_url='http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];//当前调用jsapi的URL
+        $ticket=$this->getjsapiTicket();
+        $sign_url='jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr']. '&timestamp='. $param['timestamp']. '&url='.$jsapi_url;
+        $sign=sha1($sign_url);
         return $sign;
+    }
+    public function getjsapiTicket(){
+        //是否有缓存
+        $redis=Redis::get($this->redis_weixin_jsapi_ticket);
+        if(!$redis){
+            //获取access_token   请求接口
+            $access_token=$this->getWXAccessToken();
+            $url='https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
+            $ticket_info=file_get_contents($url);
+            $ticket_arr=json_decode($ticket_info,true);
+            print_r($ticket_arr);
+            if(isset($ticket_arr['ticket'])){
+                $ticket=$ticket_arr['ticket'];
+                //缓存  过期时间
+                Redis::set($this->redis_weixin_jsapi_ticket,$redis);
+                Redis::setTimeout($this->redis_weixin_jsapi_ticket,3600);
+            }
+        }
+        return $ticket;
     }
 }
