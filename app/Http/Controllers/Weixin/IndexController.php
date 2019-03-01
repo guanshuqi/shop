@@ -558,8 +558,7 @@ class IndexController extends Controller
         $jsconfig=[
             'appid'=>env('ALIPAY_APPID'),
             'timestamp'=>time(),
-            'noncestr' =>str_random(10),
-
+            'noncestr' =>str_random(10)
 
         ];
         $sign = $this->jssdkSign($jsconfig);
@@ -573,13 +572,13 @@ class IndexController extends Controller
     /**
      * 计算jssdk签名
      */
-    public function jssdkSign($param){
-        $jsapi_url='http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];//当前调用jsapi的URL
-        $ticket=$this->getjsapiTicket();
-        $sign_url='jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr']. '&timestamp='. $param['timestamp']. '&url='.$jsapi_url;
-        $sign=sha1($sign_url);
-        //echo $sign;
-        return $sign;
+    public function jssdkSign($param)
+    {
+        $current_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];     //当前调用 jsapi的 url
+        $ticket = $this->getJsapiTicket();
+        $str =  'jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr']. '&timestamp='. $param['timestamp']. '&url='.$current_url;
+        $signature=sha1($str);
+        return $signature;
     }
     public function getjsapiTicket(){
         //是否有缓存
