@@ -577,6 +577,7 @@ class IndexController extends Controller
         $ticket=$this->getjsapiTicket();
         $sign_url='jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr']. '&timestamp='. $param['timestamp']. '&url='.$jsapi_url;
         $sign=sha1($sign_url);
+        echo $sign;
         return $sign;
     }
     public function getjsapiTicket(){
@@ -588,7 +589,7 @@ class IndexController extends Controller
             $url='https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
             $ticket_info=file_get_contents($url);
             $ticket_arr=json_decode($ticket_info,true);
-            print_r($ticket_arr);
+            //print_r($ticket_arr);
             if(isset($ticket_arr['ticket'])){
                 $ticket=$ticket_arr['ticket'];
                 //缓存  过期时间
