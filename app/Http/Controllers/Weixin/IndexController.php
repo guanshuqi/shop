@@ -550,4 +550,28 @@ class IndexController extends Controller
 
         }
     }
+    /**
+     * 微信   jssdk
+     */
+    public function jssdk(){
+        $jsconfig=[
+            'appid'=>env('ALIPAY_APPID'),
+            'timestamp'=>time(),
+            'noncestr' =>str_random(10),
+            'sign'     =>$this->jssdkSign()
+
+        ];
+        $data=[
+            'jsconfig'=>$jsconfig
+        ];
+        return view('weixin.jssdk',$data);
+    }
+
+    /**
+     * 计算jssdk签名
+     */
+    public function jssdkSign(){
+        $sign=str_random(15);
+        return $sign;
+    }
 }

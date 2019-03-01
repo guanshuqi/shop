@@ -131,5 +131,7 @@ Route::post('/weixin/ifsuccess','Weixin\PayController@ifsuccess');     //判断�
 //微信登录
 Route::get('/weixin/login','Weixin\IndexController@login');
 Route::get('/weixin/getcode','Weixin\IndexController@getCode');
+//微信jssdk
+Route::get('weixin/jssdk/test','Weixin\IndexController@jssdk');
 
 
