@@ -597,6 +597,6 @@ class IndexController extends Controller
                 Redis::setTimeout($this->redis_weixin_jsapi_ticket,3600);
             }
         }
-        return $ticket;
+        return $redis;
     }
 }
