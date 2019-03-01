@@ -577,13 +577,13 @@ class IndexController extends Controller
         $ticket=$this->getjsapiTicket();
         $sign_url='jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr']. '&timestamp='. $param['timestamp']. '&url='.$jsapi_url;
         $sign=sha1($sign_url);
-        echo $sign;
+        //echo $sign;
         return $sign;
     }
     public function getjsapiTicket(){
         //是否有缓存
-        $redis=Redis::get($this->redis_weixin_jsapi_ticket);
-        if(!$redis){
+        $ticket=Redis::get($this->redis_weixin_jsapi_ticket);
+        if(!$ticket){
             //获取access_token   请求接口
             $access_token=$this->getWXAccessToken();
             $url='https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
@@ -593,10 +593,10 @@ class IndexController extends Controller
             if(isset($ticket_arr['ticket'])){
                 $ticket=$ticket_arr['ticket'];
                 //缓存  过期时间
-                Redis::set($this->redis_weixin_jsapi_ticket,$redis);
+                Redis::set($this->redis_weixin_jsapi_ticket,$ticket);
                 Redis::setTimeout($this->redis_weixin_jsapi_ticket,3600);
             }
         }
-        return $redis;
+        return $ticket;
     }
 }
