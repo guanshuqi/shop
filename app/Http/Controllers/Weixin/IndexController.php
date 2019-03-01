@@ -556,7 +556,7 @@ class IndexController extends Controller
      */
     public function jssdk(){
         $jsconfig=[
-            'appid'=>env('ALIPAY_APPID'),
+            'appid'=>env('WEIXIN_APPID'),
             'timestamp'=>time(),
             'noncestr' =>str_random(10)
 
