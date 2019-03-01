@@ -1,8 +1,10 @@
 @extends('user.bst')
 
 @section('content')
-    <h1>JSSDK</h1>
-    <button id="photo">选择图片</button>
+    <div class="container">
+        <h1>JSSDK</h1>
+        <button id="photo">选择图片</button>
+    </div>
 @endsection
 @section('footer')
     @parent

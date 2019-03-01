@@ -560,6 +560,7 @@ class IndexController extends Controller
             'timestamp'=>time(),
             'noncestr' =>str_random(10),
 
+
         ];
         $sign = $this->jssdkSign($jsconfig);
         $jsconfig['sign'] = $sign;
