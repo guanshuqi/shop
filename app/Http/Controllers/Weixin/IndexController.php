@@ -90,8 +90,7 @@ class IndexController extends Controller
                     $m_id = WeixinMedia::insertGetId($data);
                     var_dump($m_id);
                 }
-                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.'您好,谢谢您的关注'.']]></Content></xml>';
-                echo $xml_response;
+
             }elseif($xml->MsgType=='voice'){        //处理语音信息
                 $file_name=$this->dlVoice($xml->MediaId);
                 $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. date('Y-m-d H:i:s') .']]></Content></xml>';
@@ -133,6 +132,8 @@ class IndexController extends Controller
                         $id = WeixinUser::insertGetId($user_data);      //保存用户信息
                         //var_dump($id);
                     }
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.'您好,谢谢您的关注'.']]></Content></xml>';
+                    echo $xml_response;
                 }elseif($event=='CLICK'){               //click 菜单
                     if($xml->EventKey=='kefu'){       // 根据 EventKey判断菜单
                         $this->kefu($openid,$xml->ToUserName);
