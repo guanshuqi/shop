@@ -135,3 +135,11 @@ Route::get('/weixin/getcode','Weixin\IndexController@getCode');
 Route::get('weixin/jssdk/test','Weixin\IndexController@jssdk');
 
 
+
+Route::get('weixin/access','Weixin\WeChat@getAccessToken');//获取access_token
+Route::get('weixin/getUserlist','Weixin\WeChat@getUserList');//获取用户列表
+Route::get('weixin/redis','Weixin\WeChat@userInfoRedis');//用户信息存redis
+Route::get('weixin/getblack','Weixin\WeChat@getBlack');//黑名单管理
+Route::get('weixin/createSign','Weixin\WeChat@createSign');//黑名单管理
+
+
