@@ -67,7 +67,7 @@ class ApiController extends Controller
     public function register(Request $request){
         if(request()->isMethod('post')){
             $name=$request->input('name');
-            echo $name;
+            echo $name;'<br>';
             $pwd=$request->input('pwd');
             echo $pwd;
         }else{
