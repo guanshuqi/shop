@@ -61,9 +61,19 @@ class ApiController extends Controller
         $pwd=$request->input('pwd');
         $userInfo=UsersModel::where(['name'=>$name,'password'=>$pwd])->first();
         if($userInfo){
-            echo '登录成功';
+            return json_encode(
+                [
+                    'status'=>200,
+                    'msg'=>'登录成功'
+                ]
+            );
         }else{
-            echo '账号或密码有误';
+            return json_encode(
+                [
+                    'status'=>500,
+                    'msg'=>'账号或密码有误'
+                ]
+            );
         }
     }
     //注册
