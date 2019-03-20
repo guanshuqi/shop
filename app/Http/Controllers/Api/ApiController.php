@@ -85,7 +85,7 @@ class ApiController extends Controller
 
         //$userInfo=UsersModel::where(['password'=>$pwd,'rpassword'=>$rpwd])->first();
         if($pwd!=$rpwd){
-            return '账号或密码有误';
+            return '确认密码与密码不一致';
         }else{
             $userInfo=UsersModel::insert([
                 'name' => $name,
