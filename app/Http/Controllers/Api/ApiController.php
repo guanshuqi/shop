@@ -78,10 +78,33 @@ class ApiController extends Controller
     }
     //注册
     public function register(Request $request){
-        if(request()->isMethod('post')){
+        $name=$request->input('name');
+        $pwd=$request->input('pwd');
+        $rpwd=$request->input('rpwd');
+        $email=$request->input('email');
 
+        //$userInfo=UsersModel::where(['password'=>$pwd,'rpassword'=>$rpwd])->first();
+        if($pwd!=$rpwd){
+            return json_encode(
+                [
+                    'status'=>400,
+                    'msg'=>'确认密码与密码不一致'
+                ]
+            );
         }else{
-            return view('weixin.register11');
+            return json_encode(
+                [
+                    'status'=>200,
+                    'message'=>'注册成功'
+                ]
+            );
         }
+        //$data=[];
+        $data=[
+                'name' => $name,
+                'password' => $pwd,
+                'email' => $email
+            ];
+        $userInfo=UsersModel::insertGetId();
     }
 }
