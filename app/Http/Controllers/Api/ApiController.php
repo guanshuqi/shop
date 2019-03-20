@@ -87,7 +87,7 @@ class ApiController extends Controller
         if($pwd!=$rpwd){
             return '账号或密码有误';
         }else{
-            $userInfo=UsersModel::insertGetId([
+            $userInfo=UsersModel::insert([
                 'name' => $name,
                 'password' => $pwd,
                 'email' => $email
