@@ -71,7 +71,7 @@ class ApiController extends Controller
             return json_encode(
                 [
                     'status'=>500,
-                    'msg'=>'账号或密码有误'
+                    'message'=>'账号或密码有误'
                 ]
             );
         }
