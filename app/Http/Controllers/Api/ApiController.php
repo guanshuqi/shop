@@ -55,8 +55,21 @@ class ApiController extends Controller
         return 111;
     }
 
-    public function login(){
-
-        return view('weixin.login11');
+    public function login(Request $request){
+        if(request()->isMethod('post')){
+            $name=$request->input('name');
+            echo $name;
+        }else{
+            return view('weixin.login11');
+        }
+    }
+    //注册
+    public function register(Request $request){
+        if(request()->isMethod('post')){
+            $name=$request->input('name');
+            echo $name;
+        }else{
+            return view('weixin.register11');
+        }
     }
 }
