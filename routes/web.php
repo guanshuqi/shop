@@ -142,4 +142,6 @@ Route::get('weixin/redis','Weixin\WeChat@userInfoRedis');//用户信息存redis
 Route::get('weixin/getblack','Weixin\WeChat@getBlack');//黑名单管理
 Route::get('weixin/createSign','Weixin\WeChat@createSign');//黑名单管理
 
-Route::any('weixin/test','Api\ApiController@test');
+Route::any('weixin/test','Api\ApiController@test');//接口测试
+Route::any('weixin/cbc','Api\ApiController@curl');//加密解密
+Route::any('weixin/login11','Api\ApiController@login');//接口登录
