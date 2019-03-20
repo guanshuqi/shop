@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\UsersModel;
 
 class ApiController extends Controller
 {
@@ -56,13 +57,13 @@ class ApiController extends Controller
     }
 
     public function login(Request $request){
-        if(request()->isMethod('post')){
-            $name=$request->input('name');
-            echo $name;'<br>';
-            $pwd=$request->input('pwd');
-            return $pwd;
+        $name=$request->input('name');
+        $pwd=$request->input('pwd');
+        $userInfo=UsersModel::where(['name'=>$name,'password'=>$pwd])->first();
+        if($userInfo){
+            echo '登录成功';
         }else{
-            return view('weixin.login11');
+            echo '账号或密码有误';
         }
     }
     //注册
