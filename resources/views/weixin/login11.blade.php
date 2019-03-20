@@ -4,7 +4,6 @@
     <table  class="table table-bordered">
         <tr>
             <td>账号</td>
-
             <td><input type="text" name="name"></td>
         </tr>
         <tr>
