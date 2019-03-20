@@ -82,18 +82,28 @@ class ApiController extends Controller
         $pwd=$request->input('pwd');
         $rpwd=$request->input('rpwd');
         $email=$request->input('email');
-
-        //$userInfo=UsersModel::where(['password'=>$pwd,'rpassword'=>$rpwd])->first();
         if($pwd!=$rpwd){
-            return '确认密码与密码不一致';
+            return json_encode(
+                [
+                    'status'=>200,
+                    'msg'=>'注册成功'
+                ]
+            );
         }else{
-            $userInfo=UsersModel::insert([
-                'name' => $name,
-                'password' => $pwd,
-                'email' => $email
-            ]);
-            return '注册成功';
+            return json_encode(
+                [
+                    'status'=>500,
+                    'message'=>'确认密码与密码不一致'
+                ]
+            );
         }
+        $data=[];
+        $data=[
+            'name' => $name,
+            'password' => $pwd,
+            'email' => $email
+        ];
 
+        $userInfo=UsersModel::insert($data);
     }
 }
