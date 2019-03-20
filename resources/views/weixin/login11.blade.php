@@ -1,10 +1,11 @@
 @section('content')
-<form action="/userlogin" method="post">
+<form action="/weixin/login11" method="get">
     <h2>登录</h2>
     {{csrf_field()}}
     <table  class="table table-bordered">
         <tr>
             <td>账号</td>
+            
             <td><input type="text" name="name"></td>
         </tr>
         <tr>
