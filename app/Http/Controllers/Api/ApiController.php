@@ -68,6 +68,8 @@ class ApiController extends Controller
         if(request()->isMethod('post')){
             $name=$request->input('name');
             echo $name;
+            $pwd=$request->input('pwd');
+            echo $pwd;
         }else{
             return view('weixin.register11');
         }
