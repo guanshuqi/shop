@@ -76,6 +76,9 @@ class ApiController extends Controller
         var_dump($rs);
         die;
 
+
+
+        
     }
     //注册
     public function register(Request $request){
