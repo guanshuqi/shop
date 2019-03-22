@@ -16,8 +16,4 @@ class IndexController extends Controller
         return view('welcome',$data);
     }
 
-
-    public function encrypt(){
-        echo '<pre>';print_r($_POST);echo '<pre>';
-    }
 }
