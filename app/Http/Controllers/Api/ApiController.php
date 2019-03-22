@@ -75,22 +75,7 @@ class ApiController extends Controller
         $rs=curl_exec($ch);
         var_dump($rs);
         die;
-        $userInfo=UsersModel::where(['name'=>$name,'password'=>$pwd])->first();
-        $token = substr(md5(time().mt_rand(1,99999)),10,10);
-        $key='str:web:token:'.$userInfo->uid;
-        Redis::set($key,$token);
-        if($userInfo){
-            $response=[
-                'errno'=>200,
-                'msg'  =>'登录成功',
-                'token'=>$token
-            ];
-        }else{
-            $response=[
-                'errno'=>400,
-                'msg'  =>'账号或密码有误'
-            ];
-        }
+
     }
     //注册
     public function register(Request $request){
