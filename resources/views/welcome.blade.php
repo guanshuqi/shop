@@ -66,16 +66,16 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+        <div class="flex-center position-ref full-height">
                 <div class="top-right links">
-                    @auth
+                    @if($login==1)
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <a href="http://passport.shop.com/userlogin?rediret={{$current_url}}">Login</a>
                         <a href="{{ route('register') }}">Register</a>
-                    @endauth
+                    @endif
                 </div>
-            @endif
+
 
             <div class="content">
                 <div class="title m-b-md">
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
+                    <a href="https://laravel.com/docs">DOCS</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://forge.laravel.com">Forge</a>

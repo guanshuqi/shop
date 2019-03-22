@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Redis;
 
 class checkLoginToken
 {
@@ -15,10 +16,19 @@ class checkLoginToken
      */
     public function handle($request, Closure $next)
     {
-        if(!$request->session()->get('u_token')){
-            header('Refresh:2;url=/userlogin');
-            echo "请先登录";
-            exit;
+        if(isset($_COOKIE['uid']) && isset($_COOKIE['token'])){
+            //验证token
+            $key='str:web:token:'.$_COOKIE['uid'];
+            $token=Redis::get($key);
+            if($_COOKIE['token']=$token){
+                //登录状态
+                $request->attributes->add(['is_login'=>1]);
+            }else{
+                //未登录状态
+                $request->attributes->add(['is_login'=>0]);
+            }
+        }else{
+            $request->attributes->add(['is_login'=>0]);
         }
         return $next($request);
     }

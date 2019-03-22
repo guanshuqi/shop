@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\UsersModel;
+use Illuminate\Support\Facades\Redis;
 
 class ApiController extends Controller
 {
@@ -59,21 +60,36 @@ class ApiController extends Controller
     public function login(Request $request){
         $name=$request->input('name');
         $pwd=$request->input('pwd');
+        $data=[
+            'name'=>$name,
+            'pwd'=>$pwd
+        ];
+        $url="http://passport.shop.com/weixin/login11";
+        $ch=curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_POST,true);//文件上传
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$data); //文件上传
+        curl_setopt($ch,CURLOPT_HEADER,0);//不返回头部信息
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);//
+        //抓取url传给浏览器
+        $rs=curl_exec($ch);
+        var_dump($rs);
+        die;
         $userInfo=UsersModel::where(['name'=>$name,'password'=>$pwd])->first();
+        $token = substr(md5(time().mt_rand(1,99999)),10,10);
+        $key='str:web:token:'.$userInfo->uid;
+        Redis::set($key,$token);
         if($userInfo){
-            return json_encode(
-                [
-                    'status'=>200,
-                    'msg'=>'登录成功'
-                ]
-            );
+            $response=[
+                'errno'=>200,
+                'msg'  =>'登录成功',
+                'token'=>$token
+            ];
         }else{
-            return json_encode(
-                [
-                    'status'=>500,
-                    'message'=>'账号或密码有误'
-                ]
-            );
+            $response=[
+                'errno'=>400,
+                'msg'  =>'账号或密码有误'
+            ];
         }
     }
     //注册

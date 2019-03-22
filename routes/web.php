@@ -52,9 +52,9 @@ Route::post('/userreg','User\UserController@doReg');
 /** 登录*/
 Route::get('/userlogin','User\UserController@login');
 Route::post('/userlogin','User\UserController@doLogin');
-Route::get('/usercenter','User\UserController@center')->middleware('check.login');//
+Route::get('/usercenter','User\UserController@center')->middleware('check.login.token');//
 /** 退出*/
-Route::get('/userquit','User\UserController@quit');
+Route::get('/quit','User\UserController@quit');
 
 //中间件
 Route::middleware(['log.click'])->group(function(){
@@ -146,3 +146,8 @@ Route::any('weixin/test','Api\ApiController@test');//接口测试
 Route::any('weixin/cbc','Api\ApiController@curl');//加密解密
 Route::any('weixin/login11','Api\ApiController@login');//接口登录
 Route::any('weixin/register11','Api\ApiController@register');//接口登录
+Route::get('/','User\IndexController@index')->middleware('check.login.token');//跳转路径
+Route::get('/encrypt','User\IndexController@encrypt');//接收数据
+
+
+
