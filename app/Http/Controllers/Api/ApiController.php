@@ -60,9 +60,11 @@ class ApiController extends Controller
     public function login(Request $request){
         $name=$request->input('name');
         $pwd=$request->input('pwd');
+        $type=$request->input('type');
         $data=[
             'name'=>$name,
-            'pwd'=>$pwd
+            'pwd'=>$pwd,
+            'type'=>$type
         ];
         $url="http://gsqq.52self.cn/weixin/login11";
         $ch=curl_init();
