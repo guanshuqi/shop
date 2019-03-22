@@ -64,7 +64,7 @@ class ApiController extends Controller
             'name'=>$name,
             'pwd'=>$pwd
         ];
-        $url="http://passport.shop.com/weixin/login11";
+        $url="http://gsqq.52self.cn/weixin/login11";
         $ch=curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_POST,true);//文件上传
