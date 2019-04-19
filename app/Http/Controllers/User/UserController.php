@@ -94,8 +94,8 @@ class UserController extends Controller
 		if($res){
 			if(password_verify($request->input('pwd'),$res['pwd'])){
 				$token = substr(md5(time().mt_rand(1,99999)),10,10);
-				setcookie('uid',$res['uid'],time()+86400,'/','shop.com',false,true);
-				setcookie('token',$token,time()+86400,'/','',false,true);
+//				setcookie('uid',$res['uid'],time()+86400,'/','shop.com',false,true);
+//				setcookie('token',$token,time()+86400,'/','',false,true);
 
 //				$request->session()->put('u_token',$token);
 //				$request->session()->put('uid',$res['uid']);
@@ -136,12 +136,10 @@ class UserController extends Controller
 		}
 	}
 	/**	退出*/
-	public function quit(Request $request){
-		setcookie('uid',null);
-		setcookie('token',null);
-		$request->session()->pull('u_token',null);
-
-		header('refresh:2,url=/userlogin');
+	public function quit(){
+		setcookie('uid',time()-86400,'/','shop.com',false,true);
+		setcookie('token',time()-86400,'/','shop.com',false,true);
+		header('refresh:2,url=http://shop.com');
 		echo '退出成功，正在跳转登录页面';
 	}
 }

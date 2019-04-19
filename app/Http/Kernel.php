@@ -62,5 +62,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'check.cookie'=>\App\Http\Middleware\checkCookie::class,
         'check.login.token'=>\App\Http\Middleware\checkLoginToken::class,
+        'check.security'=>\App\Http\Middleware\InterfaceSecurity::class,
     ];
 }

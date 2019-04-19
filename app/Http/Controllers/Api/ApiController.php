@@ -66,6 +66,7 @@ class ApiController extends Controller
             'pwd'=>$pwd,
             'type'=>$type
         ];
+
         $url="http://gsqq.52self.cn/weixin/login11";
         $ch=curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
@@ -107,4 +108,5 @@ class ApiController extends Controller
 
         $userInfo=UsersModel::insert($data);
     }
+
 }

@@ -53,8 +53,7 @@ Route::post('/userreg','User\UserController@doReg');
 Route::get('/userlogin','User\UserController@login');
 Route::post('/userlogin','User\UserController@doLogin');
 Route::get('/usercenter','User\UserController@center')->middleware('check.login.token');//
-/** 退出*/
-Route::get('/quit','User\UserController@quit');
+
 
 //中间件
 Route::middleware(['log.click'])->group(function(){
@@ -147,7 +146,13 @@ Route::any('weixin/cbc','Api\ApiController@curl');//加密解密
 Route::any('weixin/login11','Api\ApiController@login');//接口登录
 Route::any('weixin/register11','Api\ApiController@register');//接口登录
 Route::get('/','User\IndexController@index')->middleware('check.login.token');//跳转路径
-Route::get('/encrypt','User\IndexController@encrypt');//接收数据
+Route::get('/quit','User\UserController@quit');//退出
 
+//调用接口
+Route::any('/openssl','Test\IndexController@openssl')->middleware('check.security');
+Route::any('/uploadImg','Test\IndexController@uploadImg');//文件上传
+Route::any('/getVcodeUrl','Test\IndexController@getVcodeUrl');//获取验证码url
+Route::any('/showVcode/{sid}','Test\IndexController@showVcode');//验证码url
+Route::any('/checkurl','Test\IndexController@checkurl');//验证码url
 
 

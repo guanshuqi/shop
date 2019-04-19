@@ -68,12 +68,12 @@
 <div class="flex-center position-ref full-height">
     @if (Route::has('login'))
         <div class="top-right links">
-            @auth
-            <a href="{{ url('/home') }}">Home</a>
+            @if($login==1)
+            <a href="http://passport.shop.com/quit">Home</a>
             @else
                 <a href="http://passport.shop.com/userlogin?rediret={{$current_url}}">Login</a>
                 <a href="{{ route('register') }}">Register</a>
-                @endauth
+            @endif
         </div>
     @endif
 

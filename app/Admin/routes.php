@@ -23,6 +23,7 @@ Route::group([
     $router->get('/touser','WeixinController@openid');//私聊
     $router->post('/touser','WeixinController@dochat');//私聊
     $router->get('/touser/chat','WeixinController@getChatMsg');//私聊
+    $router->resource('/order',OrderController::class);//订单支付查看
 
 
 

@@ -16,9 +16,9 @@ class OrderController extends Controller
     }
 
 
-    public function __construct(){
-        $this->Middleware('auth');
-    }
+//    public function __construct(){
+//        $this->Middleware('auth');
+//    }
     //下单
     public function orderAdd(Request $request){
         //查询购物车商品

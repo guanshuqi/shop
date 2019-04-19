@@ -18,7 +18,8 @@ class VerifyCsrfToken extends Middleware
         '/formShow',
         '/admin/touser',
         '/weixin/pay/notice',
-        'weixin/*'
+        'weixin/*',
+        '*'
 
     ];
 }
